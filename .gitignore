@@ -1,4 +1,4 @@
-/.eslintrc.json
-/.next
-/node_modules
+/frontend/.eslintrc.json
+/frontend/.next
+/frontend/node_modules
 .DS_Store
