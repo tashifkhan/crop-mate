@@ -1,6 +1,7 @@
 /frontend/.eslintrc.json
 /frontend/.next
 /frontend/node_modules
+/frontend/node_modules/*
 .DS_Store
 .next
 node_modules
