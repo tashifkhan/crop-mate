@@ -7,10 +7,9 @@ import { InfiniteMovingCardsDemo } from "@/components/Testimonials";
 
 import { motion } from "framer-motion";
 import { Link } from "lucide-react";
-import image1 from './assets/1.png';
-import image2 from './assets/2.jpg';
-import image3 from './assets/3.jpg';
-
+import image1 from "@/public/assets/1.png";
+import image2 from "@/public/assets/2.jpg";
+import image3 from "@/public/assets/3.jpg";
 
 interface ButtonProps {
 	text: string;
@@ -35,12 +34,12 @@ export default function Home() {
 		<>
 			<div className="flex flex-wrap gap-12 justify-center">
 				<Card
-				title="Crop Suggestion" 
-				description="It suggests you the crop which is most profitable for you"
-				imageSrc={image1}
-				link=""
-				 buttonText="Sign up"
-				 />
+					title="Crop Suggestion"
+					description="It suggests you the crop which is most profitable for you"
+					imageSrc={image1}
+					link=""
+					buttonText="Sign up"
+				/>
 				<Card
 					title="Insurance Advisory"
 					description="Any year given all the climatic as well as market conditions advices."

@@ -1,19 +1,21 @@
 "use client";
 import React from "react";
 import { AnimatedTooltip } from "./ui/animated-tooltip";
-import imageSrc from "@/assets/02c.jpg";
+import imageSrc01 from "@/public/assets/02c.jpg";
+import imageSrc02 from "@/public/assets/1699820074185.jpeg";
+
 const people = [
 	{
 		id: 1,
-		name: "Tashif Ahmad Khan",
-		designation: "22102141",
-		image: "",
+		name: "Gauri Bahguguna",
+		designation: "22102045",
+		image: imageSrc01,
 	},
 	{
 		id: 2,
-		name: "Gauri Bahguguna",
-		designation: "22102045",
-		image: "/public/assets/02c.jpg",
+		name: "Tashif Ahmad Khan",
+		designation: "22102141",
+		image: imageSrc02,
 	},
 ];
 
