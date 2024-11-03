@@ -1,4 +1,4 @@
-// File: /Users/taf/Projects/Minor Project ODD24/frontend/app/layout.tsx
+// File: /Users/taf/Projects/Minor Project ODD24/frontend/frontend/app/layout.tsx
 import * as entry from '../../../app/layout.js'
 import type { ResolvingMetadata, ResolvingViewport } from 'next/dist/lib/metadata/types/metadata-interface.js'
 
