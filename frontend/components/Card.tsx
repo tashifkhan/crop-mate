@@ -22,7 +22,7 @@ export function Card({
 }: CardProps) {
 	return (
 		<CardContainer className="inter-var">
-			<CardBody className="bg-gray-50 relative group/card dark:hover:shadow-2xl dark:hover:shadow-emerald-500/[0.1] dark:bg-black dark:border-white/[0.2] border-black/[0.1] w-auto sm:w-[22rem] h-auto rounded-xl p-4 border">
+			<CardBody className="bg-[#BEE7DB] relative group/card dark:hover:shadow-2xl dark:hover:shadow-emerald-500/[0.1] dark:bg-black dark:border-white/[0.2] border-black/[0.1] w-auto sm:w-[22rem] h-auto rounded-xl p-4 border">
 				{/* Title */}
 				<CardItem
 					translateZ="50"
