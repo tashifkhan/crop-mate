@@ -24,21 +24,21 @@ export default function Home() {
 							title="Crop Suggestion"
 							description="It suggests you the crop which is most profitable for you"
 							imageSrc={image1}
-							link=""
+							link="/suggestion"
 							buttonText="Sign up"
 						/>
 						<Card
 							title="Insurance Advisory"
 							description="Any year given all the climatic as well as market conditions advices."
 							imageSrc={image2}
-							link=""
+							link="/insurance"
 							buttonText="Sign up"
 						/>
 						<Card
 							title="Yield Prediction"
 							description="It predicts the yield of the crop you are going to grow"
 							imageSrc={image3}
-							link=""
+							link="/yield"
 							buttonText="Sign up"
 						/>
 					</div>

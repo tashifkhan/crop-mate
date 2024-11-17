@@ -16,15 +16,16 @@ export function display_logo() {
 }
 
 const Navbar = () => {
-	const isAuth = false;
+	const isAuth = true;
 	const [isOpen, setIsOpen] = useState(false);
 	const pathname = usePathname();
 
 	const navigationItems = [
 		{ name: "Home", href: "/" },
-		{ name: "About", href: "/about" },
-		{ name: "Services", href: "/services" },
-		{ name: "Contact", href: "/contact" },
+		{ name: "Crop Suggestion", href: "/suggestion" },
+		{ name: "Insurance Advisory", href: "/insurance" },
+		{ name: "Yield Estimation", href: "/yield" },
+		{ name: "Support Chat", href: "/support" },
 	];
 
 	return (

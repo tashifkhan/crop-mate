@@ -33,7 +33,7 @@ export default function RootLayout({
 	return (
 		<html lang="en">
 			<body className={inter.className}>
-				<Navbar isAuth={false} />
+				<Navbar />
 				<main className="">{children}</main>
 			</body>
 		</html>
