@@ -9,10 +9,6 @@ model = pickle.load(open('/Users/taf/Projects/Minor Project ODD24/frontend/backe
 sc = pickle.load(open('/Users/taf/Projects/Minor Project ODD24/frontend/backend/Crop-Recommendation-System-Using-Machine-Learning/standscaler.pkl','rb'))
 ms = pickle.load(open('/Users/taf/Projects/Minor Project ODD24/frontend/backend/Crop-Recommendation-System-Using-Machine-Learning/minmaxscaler.pkl','rb'))
 
-# dtr = pickle.load(open('/Users/taf/Projects/Minor Project ODD24/frontend/backend/Predicting-Crop-Yields-Crop-Yield-Prediction-Enhancing-Agriculture-with-Machine-Learning-Hindi/models/dtr.pkl','rb'))
-# preprocessor = pickle.load(open('/Users/taf/Projects/Minor Project ODD24/frontend/backend/Predicting-Crop-Yields-Crop-Yield-Prediction-Enhancing-Agriculture-with-Machine-Learning-Hindi/models/preprocessor.pkl','rb'))
-
-
 # creating flask app
 app = Flask(__name__)
 
@@ -45,21 +41,6 @@ def predict():
     else:
         result = "Sorry, we could not determine the best crop to be cultivated with the provided data."
     return render_template('index.html',result = result)
-
-# @app.route("/api/yeild",methods=['POST', 'GET'])
-# def predict():
-#     Year = request.form['Year']
-#     average_rain_fall_mm_per_year = request.form['average_rain_fall_mm_per_year']
-#     pesticides_tonnes = request.form['pesticides_tonnes']
-#     avg_temp = request.form['avg_temp']
-#     Area = request.form['Area']
-#     Item  = request.form['Item']
-
-#     features = np.array([[Year,average_rain_fall_mm_per_year,pesticides_tonnes,avg_temp,Area,Item]],dtype=object)
-#     transformed_features = preprocessor.transform(features)
-#     prediction = dtr.predict(transformed_features).reshape(1,-1)
-
-#     return render_template('index.html',prediction = prediction)
 
 if __name__=="__main__":
     app.run(debug=True)
