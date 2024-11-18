@@ -1,6 +1,7 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 import numpy as np
+import pandas as pd
 import pandas
 import sklearn
 import pickle
@@ -82,7 +83,113 @@ def predict():
         print("Error during prediction:", e)
         return jsonify({"error": "Internal server error during prediction"}), 500
     
+@app.route('/predict_yield', methods=['POST'])
+def predict_yield():
+    try:
+        # Get and validate input JSON
+        data = request.get_json()
+        print("Received JSON:", data)
+        if not data:
+            return jsonify({"error": "Invalid input, no JSON data"}), 400
+        
+        # Retrieve input data from the JSON payload
+        state = data.get('State_Name')
+        district = data.get('District_Name')
+        season = data.get('Season')
+        crop = data.get('Crop')
+        area = data.get('Area')
 
+        # Validate that all required inputs are provided
+        required_fields = {
+            'State_Name': state,
+            'District_Name': district,
+            'Season': season,
+            'Crop': crop,
+            'Area': area
+        }
+        
+        missing_fields = [field for field, value in required_fields.items() if value is None]
+        if missing_fields:
+            return jsonify({
+                "error": f"Missing required fields: {', '.join(missing_fields)}"
+            }), 400
+
+        # Validate area is a positive number
+        try:
+            area = float(area)
+            if area <= 0:
+                return jsonify({"error": "Area must be a positive number"}), 400
+        except ValueError:
+            return jsonify({"error": "Area must be a valid number"}), 400
+
+        # Prepare input data dictionary
+        input_data = {
+            'State_Name': state,
+            'District_Name': district,
+            'Season': season,
+            'Crop': crop,
+            'Area': area
+        }
+
+        try:
+            # Load the models and scalers
+            model = pickle.load(open('/Users/taf/Projects/Minor Project ODD24/frontend/backend/models/model2.pkl', 'rb'))
+            sc = pickle.load(open('/Users/taf/Projects/Minor Project ODD24/frontend/backend/models/standscaler2.pkl', 'rb'))
+            label_encoders = pickle.load(open('/Users/taf/Projects/Minor Project ODD24/frontend/backend/models/label_encoders.pkl', 'rb'))
+
+            # Create DataFrame from input
+            input_df = pd.DataFrame([input_data])
+
+            # Strip whitespace from string columns
+            string_columns = ['State_Name', 'District_Name', 'Season', 'Crop']
+            for column in string_columns:
+                input_df[column] = input_df[column].str.strip()
+
+            # Encode categorical variables
+            categorical_columns = ['State_Name', 'District_Name', 'Season', 'Crop']
+            for column in categorical_columns:
+                if column in input_df.columns:
+                    try:
+                        input_df[column] = label_encoders[column].transform(input_df[column])
+                    except ValueError as e:
+                        return jsonify({
+                            "error": f"Invalid value for {column}. Allowed values are: {', '.join(label_encoders[column].classes_)}"
+                        }), 400
+
+            # Ensure correct feature order
+            features = ['State_Name', 'District_Name', 'Season', 'Crop', 'Area']
+            input_df = input_df[features]
+
+            # Scale the features
+            try:
+                input_scaled = sc.transform(input_df)
+            except Exception as e:
+                return jsonify({"error": f"Error in scaling features: {str(e)}"}), 500
+
+            # Make prediction
+            prediction = model.predict(input_scaled)
+            
+            # Calculate yield (if needed)
+            predicted_yield = prediction[0] / area if area > 0 else 0
+
+            # Return the prediction
+            return jsonify({
+                "status": "success",
+                "predicted_production": float(prediction[0]),
+                "predicted_yield": float(predicted_yield),
+                "input_received": data
+            })
+
+        except Exception as e:
+            return jsonify({
+                "error": f"Prediction error: {str(e)}",
+                "input_received": data
+            }), 500
+
+    except Exception as e:
+        return jsonify({"error": f"Server error: {str(e)}"}), 500
+    
+    
 @app.route("/support",  methods=['POST'])
 def support():
     try:

@@ -1,5 +1,8 @@
 "use client";
 import React, { useState } from "react";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+import axios from "axios";
 
 type Props = {};
 
@@ -897,9 +900,46 @@ export default function ({}: Props) {
 		setFormData((prev) => ({ ...prev, [name]: value }));
 	};
 
-	const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
-		console.log("Form Data Submitted: ", formData);
+		try {
+			console.log(formData);
+			try {
+				const response = await axios.post(
+					"http://127.0.0.1:5000/predict_yield",
+					formData,
+					{
+						headers: {
+							"Content-Type": "application/json",
+						},
+					}
+				);
+
+				console.log(response);
+
+				// Check if the response status is in the success range (200-299)
+				if (response.status >= 200 && response.status < 300) {
+					const data = response.data;
+
+					// Assuming the Flask backend returns 'crop' and 'message' in the response
+					if (data.predicted_production) {
+						alert(
+							`Predicted Production: ${data.predicted_production}\nPredicted Yield: ${data.predicted_yield}`
+						);
+					} else {
+						alert("Error: " + (data.error || "Could not determine the crop."));
+					}
+				} else {
+					throw new Error("Failed to get a valid response from the server");
+				}
+			} catch (error) {
+				console.error("Error submitting the form", error);
+				alert("Failed to predict the yield. Please try again.");
+			}
+		} catch (error) {
+			console.error("Error submitting the form", error);
+			alert("Failed to predict the yield. Please try again.");
+		}
 	};
 
 	return (
@@ -948,15 +988,24 @@ export default function ({}: Props) {
 
 				{/* Crop Year */}
 				<div className="mx-auto w-[98%] h-[49px] bg-[#dbeee8] rounded-[10px] border border-[#466459]/40 p-2">
-					<input
-						type="number"
-						id="Crop_Year"
-						name="Crop_Year"
-						value={formData.Crop_Year}
-						onChange={handleInputChange}
-						className="w-[100%] bg-[#dbeee8] rounded-[10px] border-none text-[#466459] pl-[1.2rem] text-[#486258]/60 text-[22px] font-semibold font-['Inter'] leading-[33px]"
-						placeholder="Enter crop year"
-						required
+					<DatePicker
+						selected={
+							formData.Crop_Year
+								? new Date(Number(formData.Crop_Year), 0)
+								: null
+						}
+						onChange={(date) =>
+							handleInputChange({
+								target: {
+									name: "Crop_Year",
+									value: date.getFullYear().toString(),
+								},
+							})
+						}
+						showYearPicker
+						dateFormat="yyyy"
+						className="w-[620px] bg-[#dbeee8] rounded-[10px] border-none text-[#466459] pl-[1.2rem] text-[#486258]/60 text-[22px] font-semibold font-['Inter'] leading-[33px]"
+						placeholderText="Enter crop year"
 					/>
 				</div>
 
