@@ -5,9 +5,9 @@ import sklearn
 import pickle
 
 # importing model
-model = pickle.load(open('/Users/taf/Projects/Minor Project ODD24/frontend/backend/Crop-Recommendation-System-Using-Machine-Learning/model.pkl','rb'))
-sc = pickle.load(open('/Users/taf/Projects/Minor Project ODD24/frontend/backend/Crop-Recommendation-System-Using-Machine-Learning/standscaler.pkl','rb'))
-ms = pickle.load(open('/Users/taf/Projects/Minor Project ODD24/frontend/backend/Crop-Recommendation-System-Using-Machine-Learning/minmaxscaler.pkl','rb'))
+model = pickle.load(open('/Users/taf/Projects/Minor Project ODD24/frontend/backend/models/model.pkl','rb'))
+sc = pickle.load(open('/Users/taf/Projects/Minor Project ODD24/frontend/backend/models/standscaler.pkl','rb'))
+ms = pickle.load(open('/Users/taf/Projects/Minor Project ODD24/frontend/backend/models/minmaxscaler.pkl','rb'))
 
 # creating flask app
 app = Flask(__name__)
