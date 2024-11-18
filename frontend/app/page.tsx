@@ -10,6 +10,7 @@ import image2 from "@/public/assets/2.jpg";
 import image3 from "@/public/assets/3.jpg";
 
 import React from "react";
+import SupportChat from "@/components/supportchat";
 
 export default function Home() {
 	return (
@@ -58,6 +59,7 @@ export default function Home() {
 						<AnimatedTooltipPreview />
 					</div>
 				</div>
+				<SupportChat />
 			</div>
 		</>
 	);
