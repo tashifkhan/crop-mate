@@ -12,3 +12,4 @@ node_modules
 /backend/.venv/*
 
 .DS_Store
+backend/models/model2.pkl

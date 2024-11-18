@@ -1,6 +1,7 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { Send, Loader2, MinimizeIcon, MaximizeIcon } from "lucide-react";
+import axios from "axios";
 
 const SupportChat = () => {
 	const [messages, setMessages] = useState([
@@ -14,6 +15,66 @@ const SupportChat = () => {
 	const [newMessage, setNewMessage] = useState("");
 	const [isLoading, setIsLoading] = useState(false);
 	const [isMinimized, setIsMinimized] = useState(false);
+
+	// Create a ref for the messages container
+	const messagesEndRef = useRef(null);
+
+	// Function to scroll to the bottom
+	const scrollToBottom = () => {
+		messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+	};
+
+	// Automatically scroll when messages change
+	useEffect(() => {
+		scrollToBottom();
+	}, [messages]);
+
+	const chat_resp = async () => {
+		try {
+			const response = await axios.post(
+				"http://127.0.0.1:5000/support",
+				{
+					prompt: newMessage,
+					response: messages
+						.filter((m) => m.sender === "agent" || m.sender === "user")
+						.map((m) => ({
+							prompt: m.sender === "user" ? m.content : "",
+							answer: m.sender === "agent" ? m.content : "",
+						}))
+						.slice(-5), // Send last 5 messages for context
+				},
+				{
+					headers: {
+						"Content-Type": "application/json",
+					},
+				}
+			);
+
+			// Add agent's response to messages
+			if (response.data) {
+				const agentMessage = {
+					id: messages.length + 2,
+					content: response.data.answer, // Use 'answer' from backend
+					sender: "agent",
+					timestamp: new Date(),
+				};
+				setMessages((prev) => [...prev, agentMessage]);
+			}
+		} catch (error) {
+			console.error("Error sending message:", error);
+
+			// Optional: Add an error message to the chat
+			const errorMessage = {
+				id: messages.length + 2,
+				content: "Sorry, there was an error processing your message.",
+				sender: "agent",
+				timestamp: new Date(),
+			};
+			setMessages((prev) => [...prev, errorMessage]);
+		} finally {
+			setIsLoading(false);
+		}
+	};
 
 	const handleSendMessage = async (e) => {
 		e.preventDefault();
@@ -29,18 +90,9 @@ const SupportChat = () => {
 		setMessages((prev) => [...prev, userMessage]);
 		setNewMessage("");
 
-		// Simulate agent response
+		// Send message and get response
 		setIsLoading(true);
-		setTimeout(() => {
-			const agentMessage = {
-				id: messages.length + 2,
-				content: "Thanks for your message. An agent will respond shortly.",
-				sender: "agent",
-				timestamp: new Date(),
-			};
-			setMessages((prev) => [...prev, agentMessage]);
-			setIsLoading(false);
-		}, 1000);
+		await chat_resp();
 	};
 
 	return (
@@ -64,7 +116,7 @@ const SupportChat = () => {
 				{/* Chat area */}
 				{!isMinimized && (
 					<>
-						<div className="h-96 p-4 overflow-y-auto bg-gray-50">
+						<div className="h-96 p-4 overflow-y-auto bg-gray-50 relative">
 							<div className="space-y-4">
 								{messages.map((message) => (
 									<div
@@ -99,6 +151,8 @@ const SupportChat = () => {
 										</div>
 									</div>
 								)}
+								{/* Ref to scroll to bottom */}
+								<div ref={messagesEndRef} />
 							</div>
 						</div>
 

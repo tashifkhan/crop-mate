@@ -189,12 +189,14 @@ def predict_yield():
     except Exception as e:
         return jsonify({"error": f"Server error: {str(e)}"}), 500
     
-    
+
 @app.route("/support",  methods=['POST'])
 def support():
     try:
         question = request.json.get("prompt")
+        print("Received question:", question)
         prev_response = request.json.get("response")
+        print("Previous response:", prev_response)
         prev = "privious prompt & responses:\n"
         if prev_response is None:
             prev_response = []
