@@ -9,4 +9,6 @@ node_modules
 .next
 .env
 /backend/.env/*
+/backend/.venv/*
+
 .DS_Store
