@@ -7,7 +7,7 @@ import imageSrc02 from "@/public/assets/1699820074185.jpeg";
 const people = [
 	{
 		id: 1,
-		name: "Gauri Bahguguna",
+		name: "Gauri Bahuguna",
 		designation: "22102045",
 		image: imageSrc01,
 	},
