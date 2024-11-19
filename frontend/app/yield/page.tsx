@@ -7,6 +7,7 @@ import States from "./States";
 import StateDistricts from "./StateDistrict";
 import Crops from "./Crops";
 import seasons from "./seasons";
+import Dialogbox, { DialogBox } from "@/components/Dialogbox";
 
 type Props = {};
 
@@ -25,6 +26,12 @@ export default function ({}: Props) {
 		Production: "",
 	});
 
+	const [dialogOpen, setDialogOpen] = useState(false);
+	const [dialogContent, setDialogContent] = useState({
+		title: "",
+		content: "",
+	});
+
 	const handleInputChange = (
 		e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
 	) => {
@@ -35,43 +42,47 @@ export default function ({}: Props) {
 	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
 		try {
-			console.log(formData);
-			try {
-				const response = await axios.post(
-					"http://127.0.0.1:5000/predict_yield",
-					formData,
-					{
-						headers: {
-							"Content-Type": "application/json",
-						},
-					}
-				);
-
-				console.log(response);
-
-				// Check if the response status is in the success range (200-299)
-				if (response.status >= 200 && response.status < 300) {
-					const data = response.data;
-
-					// Assuming the Flask backend returns 'crop' and 'message' in the response
-					if (data.predicted_production) {
-						alert(
-							`Predicted Production: ${data.predicted_production}\nPredicted Yield: ${data.predicted_yield}`
-						);
-					} else {
-						alert("Error: " + (data.error || "Could not determine the crop."));
-					}
-				} else {
-					throw new Error("Failed to get a valid response from the server");
+			const response = await axios.post(
+				"http://127.0.0.1:5000/predict_yield",
+				formData,
+				{
+					headers: {
+						"Content-Type": "application/json",
+					},
 				}
-			} catch (error) {
-				console.error("Error submitting the form", error);
-				alert("Failed to predict the yield. Please try again.");
+			);
+
+			if (response.status >= 200 && response.status < 300) {
+				const data = response.data;
+
+				if (data.predicted_production) {
+					setDialogContent({
+						title: "Predicted Yield & Production",
+						content: `Predicted Production: ${Number(
+							data.predicted_production
+						).toFixed(2)}\nPredicted Yield: ${Number(
+							data.predicted_yield
+						).toFixed(2)}`,
+					});
+				} else {
+					setDialogContent({
+						title: "Error",
+						content: data.error || "Could not determine the crop.",
+					});
+				}
+			} else {
+				setDialogContent({
+					title: "Error",
+					content: "Failed to get a valid response from the server",
+				});
 			}
 		} catch (error) {
-			console.error("Error submitting the form", error);
-			alert("Failed to predict the yield. Please try again.");
+			setDialogContent({
+				title: "Error",
+				content: "Failed to predict the yield. Please try again.",
+			});
 		}
+		setDialogOpen(true);
 	};
 
 	return (
@@ -199,6 +210,12 @@ export default function ({}: Props) {
 					Predict Yield
 				</button>
 			</form>
+			<DialogBox
+				title={dialogContent.title}
+				displayContent={dialogContent.content}
+				isOpen={dialogOpen}
+				onOpenChange={setDialogOpen}
+			/>
 		</>
 	);
 }

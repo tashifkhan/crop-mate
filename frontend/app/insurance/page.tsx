@@ -8,6 +8,7 @@ import States from "../yield/States";
 import StateDistricts from "../yield/StateDistrict";
 import Crops from "../yield/Crops";
 import seasons from "../yield/seasons";
+import Dialogbox, { DialogBox } from "@/components/Dialogbox";
 
 type Props = {};
 
@@ -20,6 +21,12 @@ export default function ({}: Props) {
 		Crop: "",
 		Area: "",
 		Production: "",
+	});
+
+	const [dialogOpen, setDialogOpen] = useState(false);
+	const [dialogContent, setDialogContent] = useState({
+		title: "",
+		content: "",
 	});
 
 	const handleInputChange = (
@@ -50,7 +57,6 @@ export default function ({}: Props) {
 				if (response.status >= 200 && response.status < 300) {
 					const data = response.data;
 
-					// Assuming the Flask backend returns 'crop' and 'message' in the response
 					if (data.predicted_production) {
 						if (
 							formData.Crop in nominalYields &&
@@ -59,27 +65,42 @@ export default function ({}: Props) {
 									nominalYields[formData.Crop as keyof typeof nominalYields]
 								)
 						) {
-							alert(
-								`Get Insurance for ${formData.Crop} as the predicted yield is less than the nominal yield`
-							);
+							setDialogContent({
+								title: "Warning",
+								content:
+									"The predicted yield is below nominal yield for this crop.",
+							});
+							setDialogOpen(true);
 						} else {
-							alert(
-								`The predicted yield for ${formData.Crop} is ${data.predicted_yield} tons/hectare which is greater than the normial yield thus no need for insurance`
-							);
+							setDialogContent({
+								title: "Go Ahead",
+								content: `Your Predicted Yield: ${data.predicted_yield}\n\nWhich is greater than the nominal yield for this crop.`,
+							});
+							setDialogOpen(true);
 						}
 					} else {
-						alert("Error: " + (data.error || "Could not determine the crop."));
+						setDialogContent({
+							title: "Error",
+							content: data.error || "Could not process prediction",
+						});
+						setDialogOpen(true);
 					}
 				} else {
-					throw new Error("Failed to get a valid response from the server");
+					setDialogContent({
+						title: "Error",
+						content: "Failed to get a valid response from the server",
+					});
+					setDialogOpen(true);
 				}
 			} catch (error) {
-				console.error("Error submitting the form", error);
-				alert("Failed to predict the yield. Please try again.");
+				setDialogContent({
+					title: "Error",
+					content: "Failed to predict the yield. Please try again.",
+				});
+				setDialogOpen(true);
 			}
 		} catch (error) {
-			console.error("Error submitting the form", error);
-			alert("Failed to predict the yield. Please try again.");
+			console.error("Error:", error);
 		}
 	};
 
@@ -185,6 +206,12 @@ export default function ({}: Props) {
 					Insurance Advice ?
 				</button>
 			</form>
+			<DialogBox
+				title={dialogContent.title}
+				displayContent={dialogContent.content}
+				isOpen={dialogOpen}
+				onOpenChange={setDialogOpen}
+			/>
 		</>
 	);
 }

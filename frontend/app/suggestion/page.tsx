@@ -1,34 +1,10 @@
 "use client";
 import React, { useState } from "react";
 import axios from "axios";
+import crops from "./crop";
+import Dialogbox, { DialogBox } from "@/components/Dialogbox";
 
 const CropPredictionForm: React.FC = () => {
-	const crops = {
-		1: "Rice",
-		2: "Maize",
-		3: "Jute",
-		4: "Cotton",
-		5: "Coconut",
-		6: "Papaya",
-		7: "Orange",
-		8: "Apple",
-		9: "Muskmelon",
-		10: "Watermelon",
-		11: "Grapes",
-		12: "Mango",
-		13: "Banana",
-		14: "Pomegranate",
-		15: "Lentil",
-		16: "Blackgram",
-		17: "Mungbean",
-		18: "Mothbeans",
-		19: "Pigeonpeas",
-		20: "Kidneybeans",
-		21: "Chickpea",
-		22: "Coffee",
-		23: "Wheat",
-	};
-
 	const [formData, setFormData] = useState({
 		Nitrogen: "",
 		Phosphorus: "",
@@ -37,6 +13,12 @@ const CropPredictionForm: React.FC = () => {
 		Humidity: "",
 		Ph: "",
 		Rainfall: "",
+	});
+
+	const [dialogOpen, setDialogOpen] = useState(false);
+	const [dialogContent, setDialogContent] = useState({
+		title: "",
+		content: "",
 	});
 
 	const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -73,9 +55,12 @@ const CropPredictionForm: React.FC = () => {
 			Rainfall: parseFloat(formData.Rainfall),
 		};
 
-		// Check if any value is NaN after conversion, and alert user if invalid
 		if (Object.values(floatData).some((value) => isNaN(value))) {
-			alert("Please enter valid numerical values for all fields.");
+			setDialogContent({
+				title: "Error",
+				content: "Please fill in all fields with valid numbers.",
+			});
+			setDialogOpen(true);
 			return;
 		}
 
@@ -98,20 +83,39 @@ const CropPredictionForm: React.FC = () => {
 
 					// Assuming the Flask backend returns 'crop' and 'message' in the response
 					if (data.crop) {
-						alert(`Predicted crop: ${data.crop}\nMessage: ${data.message}`);
+						setDialogContent({
+							title: "Recommended Crop:",
+							content: `${data.crop}`,
+						});
+						setDialogOpen(true);
+						// alert(`Predicted crop: ${data.crop}\nMessage: ${data.message}`);
 					} else {
-						alert("Error: " + (data.error || "Could not determine the crop."));
+						setDialogContent({
+							title: "Error:",
+							content:
+								"Error: " + (data.error || "Could not determine the crop."),
+						});
+						setDialogOpen(true);
+						// alert("Error: " + (data.error || "Could not determine the crop."));
 					}
 				} else {
 					throw new Error("Failed to get a valid response from the server");
 				}
 			} catch (error) {
 				console.error("Error submitting the form", error);
-				alert("Failed to predict the crop. Please try again.");
+				setDialogContent({
+					title: "Error:",
+					content: "Failed to predict the crop. Please try again.",
+				});
+				// alert("Failed to predict the crop. Please try again.");
 			}
 		} catch (error) {
 			console.error("Error submitting the form", error);
-			alert("Failed to predict the crop. Please try again.");
+			setDialogContent({
+				title: "Error:",
+				content: "Failed to predict the crop. Please try again.",
+			});
+			// alert("Failed to predict the crop. Please try again.");
 		}
 	};
 
@@ -153,6 +157,12 @@ const CropPredictionForm: React.FC = () => {
 					Predict Crop
 				</button>
 			</form>
+			<DialogBox
+				title={dialogContent.title}
+				displayContent={dialogContent.content}
+				isOpen={dialogOpen}
+				onOpenChange={setDialogOpen}
+			/>
 		</div>
 	);
 };
