@@ -9,6 +9,7 @@ import StateDistricts from "../yield/StateDistrict";
 import Crops from "../yield/Crops";
 import seasons from "../yield/seasons";
 import Dialogbox, { DialogBox } from "@/components/Dialogbox";
+import weatherPatterns from "./weatherPattern";
 
 type Props = {};
 
@@ -39,68 +40,103 @@ export default function ({}: Props) {
 	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
 		try {
-			console.log(formData);
-			try {
-				const response = await axios.post(
-					"http://127.0.0.1:5000/predict_yield",
-					formData,
-					{
-						headers: {
-							"Content-Type": "application/json",
-						},
-					}
-				);
+			// Get weather pattern for selected state
+			const stateWeather = weatherPatterns.find(
+				(pattern) => pattern.name === formData.State_Name
+			);
 
-				console.log(response);
-
-				// Check if the response status is in the success range (200-299)
-				if (response.status >= 200 && response.status < 300) {
-					const data = response.data;
-
-					if (data.predicted_production) {
-						if (
-							formData.Crop in nominalYields &&
-							parseFloat(data.predicted_yield) <
-								parseFloat(
-									nominalYields[formData.Crop as keyof typeof nominalYields]
-								)
-						) {
-							setDialogContent({
-								title: "Warning",
-								content:
-									"The predicted yield is below nominal yield for this crop.",
-							});
-							setDialogOpen(true);
-						} else {
-							setDialogContent({
-								title: "Go Ahead",
-								content: `Your Predicted Yield: ${data.predicted_yield}\n\nWhich is greater than the nominal yield for this crop.`,
-							});
-							setDialogOpen(true);
-						}
-					} else {
-						setDialogContent({
-							title: "Error",
-							content: data.error || "Could not process prediction",
-						});
-						setDialogOpen(true);
-					}
-				} else {
-					setDialogContent({
-						title: "Error",
-						content: "Failed to get a valid response from the server",
-					});
-					setDialogOpen(true);
-				}
-			} catch (error) {
-				setDialogContent({
-					title: "Error",
-					content: "Failed to predict the yield. Please try again.",
-				});
-				setDialogOpen(true);
+			if (!stateWeather) {
+				throw new Error("Weather data not found for selected state");
 			}
+
+			// Make parallel API calls
+			const [yieldResponse, weatherResponse] = await Promise.all([
+				axios.post("http://127.0.0.1:5000/predict_yield", formData, {
+					headers: { "Content-Type": "application/json" },
+				}),
+				axios.post("http://127.0.0.1:5000/weather", stateWeather),
+			]);
+
+			// Process yield prediction
+			const yieldData = yieldResponse.data;
+			const weatherData = weatherResponse.data;
+
+			let dialogTitle = "Crop Assessment Results";
+			let dialogContent = "";
+
+			// Check yield prediction
+			if (yieldData.predicted_production) {
+				const nominalYield =
+					formData.Crop in nominalYields
+						? Number(
+								nominalYields[formData.Crop as keyof typeof nominalYields]
+						  ).toFixed(2)
+						: "Not available";
+
+				const isYieldBelowNominal =
+					formData.Crop in nominalYields &&
+					parseFloat(yieldData.predicted_yield) <
+						parseFloat(
+							nominalYields[formData.Crop as keyof typeof nominalYields]
+						);
+
+				// Yield Assessment Section
+				dialogContent = `📊 YIELD ASSESSMENT
+			${isYieldBelowNominal ? "⚠️" : "✅"} Status: ${
+					isYieldBelowNominal ? "Below" : "Above"
+				} nominal yield
+			• Nominal Yield: ${nominalYield}
+			• Predicted Yield: ${yieldData.predicted_yield}
+			• Predicted Production: ${yieldData.predicted_production}\n\n`;
+
+				// Weather Assessment Section
+				const highFloodRisk = weatherData.flood_risk.percentage > 60;
+				const highDroughtRisk = weatherData.drought_risk.percentage - 62 > 60;
+
+				dialogContent += `🌤️ WEATHER ASSESSMENT
+			• Flood Risk: ${weatherData.flood_risk.percentage}% 
+			• Drought Risk: ${
+				weatherData.drought_risk.percentage - 62 < 0
+					? -1 * (weatherData.drought_risk.percentage - 62)
+					: weatherData.drought_risk.percentage - 62
+			}% \n`;
+
+				// Risk Recommendations
+				if (highFloodRisk || highDroughtRisk) {
+					dialogContent += "\n⚠️ HIGH RISK ALERTS:";
+					if (highFloodRisk) {
+						dialogContent += `\n• High flood risk detected (${weatherData.flood_risk.percentage}%)`;
+					}
+					if (highDroughtRisk) {
+						dialogContent += `\n• High drought risk detected (${
+							weatherData.drought_risk.percentage - 62 < 0
+								? -1 * (weatherData.drought_risk.percentage - 62)
+								: weatherData.drought_risk.percentage - 62
+						}%)`;
+					}
+					dialogContent +=
+						"\n\n🔔 RECOMMENDATION: Consider getting crop insurance due to high weather risks.";
+				} else {
+					dialogContent +=
+						"\n🟢 LOW RISK ALERTS: No high risks detected.\nYou can skip insurance";
+				}
+			} else {
+				dialogTitle = "Error";
+				dialogContent = yieldData.error || "Could not process prediction";
+			}
+
+			setDialogContent({
+				title: dialogTitle,
+				content: dialogContent,
+			});
+			setDialogOpen(true);
 		} catch (error) {
 			console.error("Error:", error);
+			setDialogContent({
+				title: "Error",
+				content: "Failed to process request. Please try again.",
+			});
+			setDialogOpen(true);
 		}
 	};
 

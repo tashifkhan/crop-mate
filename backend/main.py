@@ -11,6 +11,7 @@ import google.generativeai as genai
 import requests
 import json
 import os
+from weather_risk import AdvancedWeatherRiskAssessment
 
 
 # importing model
@@ -228,6 +229,61 @@ def support():
                 "error": str(e)
             }
         ), 500
+    
+@app.route("/weather", methods=['POST'])
+def weather_risk():
+    try:
+        data = request.json
+        
+        # Validate required fields
+        required_fields = ['name', 'latitude', 'longitude', 'avg_annual_rainfall']
+        if not all(field in data for field in required_fields):
+            return jsonify({
+                "error": "Missing required fields. Need: name, latitude, longitude, avg_annual_rainfall"
+            }), 400
+
+        location_data = {
+            'name': data['name'],
+            'latitude': data['latitude'],
+            'longitude': data['longitude'],
+            'avg_annual_rainfall': data['avg_annual_rainfall'],
+            'historical_rainfall': data.get('historical_rainfall', [])
+        }
+
+        recent_rainfall = data.get('recent_rainfall', [])
+        
+        if not recent_rainfall:
+            return jsonify({
+                "error": "Missing recent_rainfall data"
+            }), 400
+
+        # Initialize weather risk assessment
+        assessment = AdvancedWeatherRiskAssessment(location_data)
+        
+        # Calculate all risk metrics
+        flood_risk = assessment.predict_flood_risk(recent_rainfall)
+        drought_risk = assessment.predict_drought_risk(recent_rainfall)
+        
+        return jsonify({
+            'location': location_data['name'],
+            'coordinates': {
+                'latitude': location_data['latitude'],
+                'longitude': location_data['longitude']
+            },
+            'flood_risk': {
+                'percentage': round(flood_risk['flood_risk_percentage'], 2),
+                'category': flood_risk['risk_category']
+            },
+            'drought_risk': {
+                'percentage': round(drought_risk['drought_risk_percentage'], 2),
+                'category': drought_risk['risk_category']
+            }
+        })
+
+    except Exception as e:
+        return jsonify({
+            "error": f"Weather risk assessment failed: {str(e)}"
+        }), 500
     
 
 if __name__ == "__main__":
