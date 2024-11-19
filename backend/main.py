@@ -214,6 +214,8 @@ def support():
             prompt,
             generation_config = genai.types.GenerationConfig(temperature=0.1)
         )
+        
+        print("Generated response:", response.text)
 
         prev_response.append({"prompt": question, "answer": response.text})
 

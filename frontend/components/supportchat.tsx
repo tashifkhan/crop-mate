@@ -99,7 +99,7 @@ const SupportChat = () => {
 		<div className="fixed bottom-4 right-4 w-96 z-50">
 			<div className="bg-white rounded-lg shadow-lg overflow-hidden">
 				{/* Header */}
-				<div className="bg-blue-600 p-4 flex justify-between items-center">
+				<div className="bg-[#2b3f51] p-4 flex justify-between items-center">
 					<h3 className="text-white font-semibold">Support Chat</h3>
 					<button
 						onClick={() => setIsMinimized(!isMinimized)}
@@ -130,7 +130,7 @@ const SupportChat = () => {
 										<div
 											className={`max-w-[80%] rounded-lg p-3 ${
 												message.sender === "user"
-													? "bg-blue-600 text-white"
+													? "bg-[#2b3f51] text-white"
 													: "bg-gray-200 text-gray-800"
 											}`}
 										>
@@ -169,7 +169,7 @@ const SupportChat = () => {
 								<button
 									type="submit"
 									disabled={isLoading}
-									className="bg-blue-600 text-white p-2 rounded-md hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
+									className="bg-[#2b3f51] text-white p-2 rounded-md hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
 								>
 									<Send size={20} />
 								</button>

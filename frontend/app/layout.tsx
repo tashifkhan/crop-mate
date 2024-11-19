@@ -17,6 +17,7 @@ import { Inter } from "next/font/google";
 import Navbar from "@/components/NavBar";
 import "./globals.css";
 import React from "react";
+import SupportChat from "@/components/supportchat";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -35,6 +36,7 @@ export default function RootLayout({
 			<body className={inter.className}>
 				<Navbar />
 				<main className="">{children}</main>
+				<SupportChat />
 			</body>
 		</html>
 	);

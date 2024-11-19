@@ -1,9 +1,11 @@
 "use client";
 import React, { useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { Menu, X } from "lucide-react";
 import Button from "@/components/Button";
+import logoSrc from "@/public/assets/icon.png";
 
 export function display_logo() {
 	return (
@@ -33,6 +35,15 @@ const Navbar = () => {
 			<div className="max-w-6xl mx-auto px-4">
 				<div className="flex justify-between items-center h-16">
 					{/* Logo */}
+					<Link href="/">
+						<Image
+							src={logoSrc}
+							alt="CropMate Cutie"
+							width={165}
+							height={50}
+							className="cursor-pointer fixed top-4 left-4 "
+						/>
+					</Link>
 					<div className="flex-shrink-0 flex items-center">
 						<Link href="/" className="text-xl font-bold text-gray-800">
 							CropMate
