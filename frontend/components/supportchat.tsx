@@ -14,7 +14,7 @@ const SupportChat = () => {
 	]);
 	const [newMessage, setNewMessage] = useState("");
 	const [isLoading, setIsLoading] = useState(false);
-	const [isMinimized, setIsMinimized] = useState(false);
+	const [isMinimized, setIsMinimized] = useState(true);
 
 	// Create a ref for the messages container
 	const messagesEndRef = useRef(null);

@@ -27,7 +27,7 @@ const Navbar = () => {
 		{ name: "Crop Suggestion", href: "/suggestion" },
 		{ name: "Insurance Advisory", href: "/insurance" },
 		{ name: "Yield Estimation", href: "/yield" },
-		{ name: "Support Chat", href: "/support" },
+		// { name: "Support Chat", href: "/support" },
 	];
 
 	return (
