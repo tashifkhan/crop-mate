@@ -19,31 +19,32 @@ export function InfiniteMovingCardsDemo() {
 const testimonials = [
 	{
 		quote:
-			"It was the best of times, it was the worst of times, it was the age of wisdom, it was the age of foolishness, it was the epoch of belief, it was the epoch of incredulity, it was the season of Light, it was the season of Darkness, it was the spring of hope, it was the winter of despair.",
+			"India’s average crop yield currently stands at only 2.6 tonnes per hectare, starkly lagging behind other agricultural powerhouses such as China, where average yields are as high as 5.7 tonnes per hectare.",
 		name: "Charles Dickens",
-		title: "A Tale of Two Cities",
+		title: "Low Crop Yield",
 	},
 	{
 		quote:
-			"To be, or not to be, that is the question: Whether 'tis nobler in the mind to suffer The slings and arrows of outrageous fortune, Or to take Arms against a Sea of troubles, And by opposing end them: to die, to sleep.",
+			"Indian agriculture is heavily dependent on monsoon rains, with over 60% of all cultivated land being rainfed. This reliance on natural precipitation makes Indian farmers especially susceptible to the vagaries of climate change.",
 		name: "William Shakespeare",
-		title: "Hamlet",
+		title: "Climate Vulnerability",
 	},
 	{
-		quote: "All that we see or seem is but a dream within a dream.",
+		quote:
+			"Despite the inherent risks associated with farming, crop insurance remains significantly underutilised among Indian farmers, with only 23% covered by any form of crop insurance. .",
 		name: "Edgar Allan Poe",
-		title: "A Dream Within a Dream",
+		title: "Financial Risks ",
 	},
 	{
 		quote:
-			"It is a truth universally acknowledged, that a single man in possession of a good fortune, must be in want of a wife.",
+			"The Crop Recommendation Engine is the centerpiece of the solution, designed to help farmers choose the most profitable and suitable crops for their specific conditions. ",
 		name: "Jane Austen",
-		title: "Pride and Prejudice",
+		title: "Crop Recommendation Engine",
 	},
 	{
 		quote:
-			"Call me Ishmael. Some years ago—never mind how long precisely—having little or no money in my purse, and nothing particular to interest me on shore, I thought I would sail about a little and see the watery part of the world.",
+			"Accurate yield predictions are essential for planning harvest schedules, resource allocation, and assessing potential .",
 		name: "Herman Melville",
-		title: "Moby-Dick",
+		title: "Yield Estimation",
 	},
 ];
