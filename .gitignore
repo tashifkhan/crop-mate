@@ -13,3 +13,5 @@ node_modules
 
 .DS_Store
 backend/models/model2.pklbackend/models/*.pkl
+
+# __pycache__

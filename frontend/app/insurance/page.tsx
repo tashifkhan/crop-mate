@@ -76,9 +76,7 @@ export default function ({}: Props) {
 				const isYieldBelowNominal =
 					formData.Crop in nominalYields &&
 					parseFloat(yieldData.predicted_yield) <
-						parseFloat(
-							nominalYields[formData.Crop as keyof typeof nominalYields]
-						);
+						nominalYields[formData.Crop as keyof typeof nominalYields];
 
 				// Yield Assessment Section
 				dialogContent = `📊 YIELD ASSESSMENT
@@ -91,14 +89,14 @@ export default function ({}: Props) {
 
 				// Weather Assessment Section
 				const highFloodRisk = weatherData.flood_risk.percentage > 60;
-				const highDroughtRisk = weatherData.drought_risk.percentage - 62 > 60;
+				const highDroughtRisk = weatherData.drought_risk.percentage - 67 > 60;
 
 				dialogContent += `🌤️ WEATHER ASSESSMENT
 			• Flood Risk: ${weatherData.flood_risk.percentage}% 
 			• Drought Risk: ${
-				weatherData.drought_risk.percentage - 62 < 0
-					? -1 * (weatherData.drought_risk.percentage - 62)
-					: weatherData.drought_risk.percentage - 62
+				weatherData.drought_risk.percentage - 67 < 0
+					? -1 * (weatherData.drought_risk.percentage - 67)
+					: weatherData.drought_risk.percentage - 67
 			}% \n`;
 
 				// Risk Recommendations
@@ -109,9 +107,9 @@ export default function ({}: Props) {
 					}
 					if (highDroughtRisk) {
 						dialogContent += `\n• High drought risk detected (${
-							weatherData.drought_risk.percentage - 62 < 0
-								? -1 * (weatherData.drought_risk.percentage - 62)
-								: weatherData.drought_risk.percentage - 62
+							weatherData.drought_risk.percentage - 67 < 0
+								? -1 * (weatherData.drought_risk.percentage - 67)
+								: weatherData.drought_risk.percentage - 67
 						}%)`;
 					}
 					dialogContent +=
@@ -153,7 +151,7 @@ export default function ({}: Props) {
 						name="State_Name"
 						value={formData.State_Name}
 						onChange={handleInputChange}
-						className="w-[100%] bg-[#dbeee8] rounded-[10px] border-none text-[#466459] pl-[1.2rem] text-[#486258]/60 text-[22px] font-semibold font-['Inter'] leading-[33px]"
+						className="w-[100%] bg-[#dbeee8] rounded-[10px] border-none text-[#466459] pl-[1.2rem] text-[#486758]/60 text-[22px] font-semibold font-['Inter'] leading-[33px]"
 					>
 						<option value="">Select State</option>
 						{States.map((state) => (
@@ -172,7 +170,7 @@ export default function ({}: Props) {
 						value={formData.District_Name}
 						onChange={handleInputChange}
 						disabled={!formData.State_Name}
-						className="w-[100%] bg-[#dbeee8] rounded-[10px] border-none text-[#466459] pl-[1.2rem] text-[#486258]/60 text-[22px] font-semibold font-['Inter'] leading-[33px]"
+						className="w-[100%] bg-[#dbeee8] rounded-[10px] border-none text-[#466459] pl-[1.2rem] text-[#486758]/60 text-[22px] font-semibold font-['Inter'] leading-[33px]"
 					>
 						<option value="">Select District</option>
 						{formData.State_Name &&
@@ -191,7 +189,7 @@ export default function ({}: Props) {
 						name="Season"
 						value={formData.Season}
 						onChange={handleInputChange}
-						className="w-[100%] bg-[#dbeee8] rounded-[10px] border-none text-[#466459] pl-[1.2rem] text-[#486258]/60 text-[22px] font-semibold font-['Inter'] leading-[33px]"
+						className="w-[100%] bg-[#dbeee8] rounded-[10px] border-none text-[#466459] pl-[1.2rem] text-[#486758]/60 text-[22px] font-semibold font-['Inter'] leading-[33px]"
 					>
 						<option value="">Select Season</option>
 						{seasons.map((season) => (
@@ -209,7 +207,7 @@ export default function ({}: Props) {
 						name="Crop"
 						value={formData.Crop}
 						onChange={handleInputChange}
-						className="w-[100%] bg-[#dbeee8] rounded-[10px] border-none text-[#466459] pl-[1.2rem] text-[#486258]/60 text-[22px] font-semibold font-['Inter'] leading-[33px]"
+						className="w-[100%] bg-[#dbeee8] rounded-[10px] border-none text-[#466459] pl-[1.2rem] text-[#486758]/60 text-[22px] font-semibold font-['Inter'] leading-[33px]"
 					>
 						<option value="">Select Crop</option>
 						{Crops.map((crop) => (
@@ -228,7 +226,7 @@ export default function ({}: Props) {
 						name="Area"
 						value={formData.Area}
 						onChange={handleInputChange}
-						className="w-[100%] bg-[#dbeee8] rounded-[10px] border-none text-[#466459] pl-[1.2rem] text-[#486258]/60 text-[22px] font-semibold font-['Inter'] leading-[33px]"
+						className="w-[100%] bg-[#dbeee8] rounded-[10px] border-none text-[#466459] pl-[1.2rem] text-[#486758]/60 text-[22px] font-semibold font-['Inter'] leading-[33px]"
 						placeholder="Enter area in hectares"
 						required
 					/>

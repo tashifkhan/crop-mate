@@ -15,9 +15,9 @@ from weather_risk import AdvancedWeatherRiskAssessment
 
 
 # importing model
-model = pickle.load(open('/Users/taf/Projects/Minor Project ODD24/frontend/backend/models/model.pkl','rb'))
-sc = pickle.load(open('/Users/taf/Projects/Minor Project ODD24/frontend/backend/models/standscaler.pkl','rb'))
-ms = pickle.load(open('/Users/taf/Projects/Minor Project ODD24/frontend/backend/models/minmaxscaler.pkl','rb'))
+model = pickle.load(open('./models/model.pkl','rb'))
+sc = pickle.load(open('./models/standscaler.pkl','rb'))
+ms = pickle.load(open('./models/minmaxscaler.pkl','rb'))
 
 load_dotenv()
 api_key = os.getenv("GOOGLE_API_KEY")
@@ -134,9 +134,9 @@ def predict_yield():
 
         try:
             # Load the models and scalers
-            model = pickle.load(open('/Users/taf/Projects/Minor Project ODD24/frontend/backend/models/model2.pkl', 'rb'))
-            sc = pickle.load(open('/Users/taf/Projects/Minor Project ODD24/frontend/backend/models/standscaler2.pkl', 'rb'))
-            label_encoders = pickle.load(open('/Users/taf/Projects/Minor Project ODD24/frontend/backend/models/label_encoders.pkl', 'rb'))
+            model = pickle.load(open('./models/model2.pkl', 'rb'))
+            sc = pickle.load(open('./models/standscaler2.pkl', 'rb'))
+            label_encoders = pickle.load(open('./models/label_encoders.pkl', 'rb'))
 
             # Create DataFrame from input
             input_df = pd.DataFrame([input_data])
@@ -190,45 +190,50 @@ def predict_yield():
     except Exception as e:
         return jsonify({"error": f"Server error: {str(e)}"}), 500
     
-
-@app.route("/support",  methods=['POST'])
+@app.route("/support", methods=['POST'])
 def support():
     try:
+        # Get the user question and previous conversation context
         question = request.json.get("prompt")
         print("Received question:", question)
-        prev_response = request.json.get("response")
-        print("Previous response:", prev_response)
-        prev = "privious prompt & responses:\n"
-        if prev_response is None:
-            prev_response = []
-        else:
-            for res in prev_response:
-                prev += f"prompt - {res['prompt']}\nreponse - {res['answer']}\n"
+        prev_responses = request.json.get("response")
+        print("Previous responses:", prev_responses)
+        
+        # Build the conversation context
+        conversation_history = "Previous conversation:\n"
+        if prev_responses:
+            for res in prev_responses:
+                if res.get("prompt") != None:
+                    conversation_history += f"User: {res['prompt']}\n"
+                if res.get("answer") != None:
+                    conversation_history += f"Agent: {res['answer']}\n"
 
-        prompt = f'''
-            Assume the role of a chat support representative for rural farmers and help them in any way possible by answering thier quaries be precise and answer the questions in a way that is easy to understand.
-        ''' 
+        # print("Conversation history:", conversation_history)
+        
+        # Append the current question
+        prompt = f"""
+        You are a chat support representative for rural farmers. Answer their queries in a clear, easy-to-understand, and precise manner. Provide helpful suggestions where possible.
 
-        prompt = f"{prompt}\n{prev}\n{question}"
+        {conversation_history}
+        User: {question}
+        Agent:
+        """
 
+        # Generate the response using the AI model
         response = genai_model.generate_content(
-            prompt,
-            generation_config = genai.types.GenerationConfig(temperature=0.1)
+            prompt.strip(),
+            generation_config=genai.types.GenerationConfig(temperature=0.1)
         )
         
         print("Generated response:", response.text)
 
-        prev_response.append({"prompt": question, "answer": response.text})
+        # Update the conversation history
+        # prev_responses.append({"prompt": question, "answer": response.text})
 
-        return jsonify({"prompt": prompt.strip(),"answer": response.text,}, prev_response)
+        return jsonify({"prompt": prompt.strip(), "answer": response.text, "prev_responses": prev_responses})
 
-    
     except Exception as e:
-        return jsonify(
-            {
-                "error": str(e)
-            }
-        ), 500
+        return jsonify({"error": str(e)}), 500
     
 @app.route("/weather", methods=['POST'])
 def weather_risk():

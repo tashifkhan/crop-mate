@@ -2,6 +2,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import { Send, Loader2, MinimizeIcon, MaximizeIcon } from "lucide-react";
 import axios from "axios";
+import ReactMarkdown from "react-markdown";
 
 const SupportChat = () => {
 	const [messages, setMessages] = useState([
@@ -17,7 +18,7 @@ const SupportChat = () => {
 	const [isMinimized, setIsMinimized] = useState(true);
 
 	// Create a ref for the messages container
-	const messagesEndRef = useRef(null);
+	const messagesEndRef = useRef<HTMLDivElement>(null);
 
 	// Function to scroll to the bottom
 	const scrollToBottom = () => {
@@ -34,14 +35,15 @@ const SupportChat = () => {
 			const response = await axios.post(
 				"http://127.0.0.1:5000/support",
 				{
-					prompt: newMessage,
+					prompt: newMessage, // Current user message
 					response: messages
 						.filter((m) => m.sender === "agent" || m.sender === "user")
 						.map((m) => ({
-							prompt: m.sender === "user" ? m.content : "",
-							answer: m.sender === "agent" ? m.content : "",
+							prompt: m.sender === "user" ? m.content : null, // Assign content if sender is 'user'
+							answer: m.sender === "agent" ? m.content : null, // Assign content if sender is 'agent'
 						}))
-						.slice(-5), // Send last 5 messages for context
+						.slice(-5) // Limit to last 5 messages
+						.filter((m) => m.prompt || m.answer), // Remove empty entries
 				},
 				{
 					headers: {
@@ -76,7 +78,7 @@ const SupportChat = () => {
 		}
 	};
 
-	const handleSendMessage = async (e) => {
+	const handleSendMessage = async (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
 		if (!newMessage.trim()) return;
 
@@ -116,7 +118,7 @@ const SupportChat = () => {
 				{/* Chat area */}
 				{!isMinimized && (
 					<>
-						<div className="h-96 p-4 overflow-y-auto bg-gray-50 relative">
+						<div className="max-h-[calc(100vh-14rem)] p-4 overflow-y-auto bg-gray-50 relative transition-all duration-300">
 							<div className="space-y-4">
 								{messages.map((message) => (
 									<div
@@ -134,7 +136,11 @@ const SupportChat = () => {
 													: "bg-gray-200 text-gray-800"
 											}`}
 										>
-											<p>{message.content}</p>
+											{message.sender === "agent" ? (
+												<ReactMarkdown>{message.content}</ReactMarkdown>
+											) : (
+												<p>{message.content}</p>
+											)}
 											<span className="text-xs opacity-75 mt-1 block">
 												{message.timestamp.toLocaleTimeString([], {
 													hour: "2-digit",

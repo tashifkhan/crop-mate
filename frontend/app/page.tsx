@@ -13,8 +13,8 @@ import React from "react";
 export default function Home() {
 	return (
 		<>
-			<div className="flex justify-center bg-[#9EC8B9]">
-				<div className="w-[1643px] h-[1068px] bg-[#9EC8B9]">
+			<div className="flex justify-center bg-[#9EC8B9] h-[vh] overflow-auto">
+				<div className="w-[1643px] bg-[#9EC8B9]">
 					<div className="w-[310px] h-6 text-[#092635] text-[4rem] font-extrabold font-['Podkova'] leading-normal mx-auto">
 						Crop Mate
 					</div>
@@ -41,17 +41,6 @@ export default function Home() {
 							buttonText="Sign up"
 						/>
 					</div>
-					{/* <div className="flex gap-2 justify-center pt-5">
-						<div className="flex space-x-4">
-							<Button text="Sign In" destination="/signin" />
-							<Button text="Sign Up" destination="/signup" />
-						</div>
-					</div>
-					<div className="pt-1 flex justify-center">
-						<button className="bg-slate-700 text-white px-6 py-2 rounded-full">
-							Support Chat
-						</button>
-					</div> */}
 					<InfiniteMovingCardsDemo />
 					<div className=" flex justify-center">
 						<AnimatedTooltipPreview />
