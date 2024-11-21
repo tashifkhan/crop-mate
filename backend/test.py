@@ -4,9 +4,10 @@ from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.preprocessing import StandardScaler, LabelEncoder
 import pickle
+import joblib
 
 # Load the data
-crop_data = pd.read_csv("/Users/taf/Projects/Minor Project ODD24/frontend/analysis/crop_production.csv")
+crop_data = pd.read_csv("/Users/taf/Projects/Minor Project ODD24/frontend/analysis/data/crop_production.csv")
 crop_data = crop_data.dropna()
 
 # Strip whitespace from string columns
@@ -46,15 +47,12 @@ x_scaled = sc.fit_transform(x)
 x_train, x_test, y_train, y_test = train_test_split(x_scaled, y, test_size=0.25, random_state=5)
 
 # Train the model
-model = RandomForestRegressor(n_estimators=11)
+model = RandomForestRegressor(n_estimators=5)
 model.fit(x_train, y_train)
 
-# Save the model and scaler
-with open('model2.pkl', 'wb') as f:
-    pickle.dump(model, f)
-
-with open('standscaler2.pkl', 'wb') as f:
-    pickle.dump(sc, f)
+# Save the model and scaler using joblib with compression
+joblib.dump(model, 'model2.pkl', compress=3)
+joblib.dump(sc, 'standscaler2.pkl', compress=3)
 
 # Optional: Print some evaluation metrics
 from sklearn.metrics import mean_squared_error, r2_score
@@ -79,5 +77,5 @@ column_names = {
     'feature_columns': list(x.columns),
     'target_column': 'Production'
 }
-with open('column_names.pkl', 'wb') as f:
-    pickle.dump(column_names, f)
+# with open('column_names.pkl', 'wb') as f:
+#     pickle.dump(column_names, f)
