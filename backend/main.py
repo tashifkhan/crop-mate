@@ -29,6 +29,39 @@ app = Flask(__name__)
 CORS(app, resources={r"/*": {"origins": "*"}})
 @app.route("/predict", methods=['POST'])
 def predict():
+    """     
+    Predict the best crop to cultivate based on soil and weather parameters.
+    API Endpoint:
+        POST /predict
+    Request JSON Payload:
+        {
+            "Nitrogen": int or float,    # Amount of Nitrogen in the soil
+            "Phosphorus": int or float,  # Amount of Phosphorus in the soil
+            "Potassium": int or float,   # Amount of Potassium in the soil
+            "Temperature": float,        # Ambient temperature in degrees Celsius
+            "Humidity": float,           # Relative humidity percentage
+            "Ph": float,                 # Soil pH value (0-14) 
+            "Rainfall": float            # Annual rainfall in mm
+    Response:
+        - Success (HTTP 200):
+            {
+                "crop": str,             # Suggested crop for cultivation
+                "message": str           # Descriptive message about the prediction
+        - Client Error (HTTP 400):
+            {
+                "error": str             # Error message detailing the issue
+        - Server Error (HTTP 500):
+            {
+                "error": "Internal server error during prediction"
+    Errors:
+        - Missing input data: Occurs if any of the required fields are not provided.
+        - Invalid pH value: Occurs if the 'Ph' value is not between 0 and 14.
+        - Internal server error: Occurs if an exception is raised during prediction.
+    Notes:
+        - All input parameters are required for a successful prediction.
+        - Ensure that the 'Ph' value is within the valid range (0 to 14).
+        - The endpoint uses a machine learning model to predict the most suitable crop.
+    """
     data = request.get_json()
     print("Received JSON:", data)
     if not data:
@@ -86,8 +119,46 @@ def predict():
     
 @app.route('/predict_yield', methods=['POST'])
 def predict_yield():
+    """
+    Predict crop production and yield based on input data.
+    API Endpoint:
+        POST /predict_yield
+    Request JSON Payload:
+        {
+            "State_Name": string,      # Name of the state
+            "District_Name": string,   # Name of the district  
+            "Season": string,          # Season of the crop
+            "Crop": string,            # Name of the crop
+            "Area": float             # Area in hectares (must be positive)
+        }
+    Response:
+        - Success (HTTP 200):
+            {
+                "status": "success",                # Status of prediction
+                "predicted_production": float,      # Predicted total production
+                "predicted_yield": float,          # Predicted yield per unit area
+                "input_received": object           # Echo of input data
+            }
+        - Client Error (HTTP 400): 
+            {
+                "error": string        # Error message detailing invalid input
+            }
+        - Server Error (HTTP 500):
+            {
+                "error": string        # Server error message
+            }
+    Errors:
+        - Missing input data: Occurs if required fields are not provided
+        - Invalid area: Occurs if area is not a positive number
+        - Invalid categorical values: Occurs if provided values don't match allowed options
+        - Server errors: Occurs if prediction pipeline fails
+    Notes:
+        - All input parameters are required
+        - Area must be a positive number
+        - State, District, Season and Crop must match pre-trained categories
+    """
     try:
-        # Get and validate input JSON
+        # Rest of the function remains same
         data = request.get_json()
         print("Received JSON:", data)
         if not data:
@@ -192,6 +263,31 @@ def predict_yield():
     
 @app.route("/support", methods=['POST'])
 def support():
+    '''
+    Chat Support Endpoint for Rural Farmers
+    This endpoint handles chat interactions between rural farmers and an AI support agent,
+    maintaining conversation history and generating contextual responses.
+    API Endpoint:
+    Request JSON Payload:
+        "prompt": str,      # User's current question/message
+        "response": list    # List of previous conversation exchanges
+        - Success (HTTP 200):
+            "prompt": str,          # Full conversation context including history
+            "answer": str,          # AI generated response to user's question
+            "prev_responses": list  # Updated conversation history
+        - Server Error (HTTP 500):
+            "error": str           # Error message describing what went wrong
+    Process:
+        1. Extracts question and conversation history from request
+        2. Builds conversation context from previous exchanges
+        3. Generates AI response using formatted prompt
+        4. Returns response with updated conversation history
+    Notes:
+        - Uses Google's Generative AI model for response generation
+        - Maintains conversation context for more relevant responses
+        - Temperature set to 0.1 for more focused, consistent responses
+        - Formats responses in a farmer-friendly, easy to understand manner
+    '''
     try:
         # Get the user question and previous conversation context
         question = request.json.get("prompt")
@@ -237,6 +333,48 @@ def support():
     
 @app.route("/weather", methods=['POST'])
 def weather_risk():
+    """
+    Assess weather-related risks (flood and drought) based on location and rainfall data.
+    API Endpoint:
+        POST /weather
+    Request JSON Payload:
+        {
+            "name": str,                     # Location name
+            "latitude": float,               # Geographical latitude
+            "longitude": float,              # Geographical longitude
+            "avg_annual_rainfall": float,    # Average annual rainfall in mm
+            "historical_rainfall": list,     # Optional: Historical rainfall data
+            "recent_rainfall": list          # Recent rainfall measurements
+    Response:
+        - Success (HTTP 200):
+            {
+                "location": str,             # Location name
+                "coordinates": {
+                    "latitude": float,       # Latitude value
+                    "longitude": float       # Longitude value
+                "flood_risk": {
+                    "percentage": float,     # Flood risk percentage (rounded to 2 decimals)
+                    "category": str          # Risk category classification
+                "drought_risk": {
+                    "percentage": float,     # Drought risk percentage (rounded to 2 decimals)
+                    "category": str          # Risk category classification
+        - Client Error (HTTP 400):
+            {
+                "error": str                 # Error message about missing required fields
+        - Server Error (HTTP 500):
+            {
+                "error": str                 # Error message with exception details
+    Errors:
+        - Missing required fields: Occurs if name, latitude, longitude, or avg_annual_rainfall is missing
+        - Missing recent rainfall data: Occurs if recent_rainfall array is empty or missing
+        - Server error: Occurs if an exception is raised during risk assessment
+    Notes:
+        - Required fields: name, latitude, longitude, avg_annual_rainfall
+        - historical_rainfall is optional but recommended for better assessment
+        - recent_rainfall is mandatory for current risk assessment
+        - Risk percentages are rounded to 2 decimal places
+        - Returns both flood and drought risk assessments with categories
+    """
     try:
         data = request.json
         
@@ -292,4 +430,4 @@ def weather_risk():
     
 
 if __name__ == "__main__":
-    app.run(debug=True, port=5000)
+    app.run()

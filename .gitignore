@@ -15,4 +15,5 @@ node_modules
 backend/models/model2.pklbackend/models/*.pkl
 
 __pycache__
-.versel
+.vercel
+vercel.json
