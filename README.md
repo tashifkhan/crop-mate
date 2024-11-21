@@ -1,7 +1,7 @@
 # AI-Driven Crop Suggestion and Insurance Advisory System for Indian Farmers
 
 `aka Crop Mate`
-`Minor Project 1 - ODD24 - JIIT`
+`, Minor Project 1 - ODD24 - JIIT`
 
 This project aims to bridge the gap between potential and actual agricultural productivity by leveraging Artificial Intelligence and Machine Learning to empower Indian farmers. It provides personalized crop recommendations, yield predictions, and crop insurance advisory, ensuring data-driven decisions for better profitability and risk management.
 
@@ -71,7 +71,7 @@ This project tackles these issues with a holistic AI-driven solution combining c
 - **Frontend**: Next.js, Framer Motion, Tailwind CSS.
 - **Backend**: Flask, Python, TensorFlow.
 - **APIs**: OpenWeatherMap, IMD, Gemini’s Gen AI.
-- **Data Sources**: FAO, WorldBank, [data.world](https://data.world/thatzprem/agriculture-india).
+- **Data Sources**: FAO, [WorldBank](https://www.data.gov.in/), [data.world](https://data.world/thatzprem/agriculture-india).
 
 ## Results
 
