@@ -9,13 +9,13 @@ const people = [
 		id: 1,
 		name: "Gauri Bahuguna",
 		designation: "22102045",
-		image: imageSrc01,
+		image: imageSrc01.src,
 	},
 	{
 		id: 2,
 		name: "Tashif Ahmad Khan",
 		designation: "22102141",
-		image: imageSrc02,
+		image: imageSrc02.src,
 	},
 ];
 
