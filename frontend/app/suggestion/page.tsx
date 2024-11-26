@@ -1,7 +1,6 @@
 "use client";
 import React, { useState } from "react";
 import axios from "axios";
-import crops from "./crop";
 import Dialogbox, { DialogBox } from "@/components/Dialogbox";
 
 const CropPredictionForm: React.FC = () => {
@@ -37,7 +36,7 @@ const CropPredictionForm: React.FC = () => {
 
 		// Ensure input is valid number before updating the state
 		if (value === "" || !isNaN(parseFloat(value))) {
-			setFormData({ ...formData, [name]: value });
+			setFormData({ ...formData, [name]: newValue });
 		}
 	};
 

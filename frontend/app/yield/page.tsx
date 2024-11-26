@@ -9,9 +9,7 @@ import Crops from "./Crops";
 import seasons from "./seasons";
 import { DialogBox } from "@/components/Dialogbox";
 
-type Props = {};
-
-export default function ({}: Props) {
+export default function () {
 	const states = States;
 	const stateDistricts = StateDistricts;
 	const crops = Crops;

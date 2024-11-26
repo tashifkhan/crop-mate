@@ -1,6 +1,5 @@
 "use client";
 import React, { useState } from "react";
-import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import axios from "axios";
 import nominalYields from "./nomialYield";
@@ -8,7 +7,7 @@ import States from "../yield/States";
 import StateDistricts from "../yield/StateDistrict";
 import Crops from "../yield/Crops";
 import seasons from "../yield/seasons";
-import Dialogbox, { DialogBox } from "@/components/Dialogbox";
+import { DialogBox } from "@/components/Dialogbox";
 import weatherPatterns from "./weatherPattern";
 
 type Props = {};

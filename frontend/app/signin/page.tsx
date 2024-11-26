@@ -1,4 +1,5 @@
 import React from "react";
+import Image from "next/image";
 
 const SignIn: React.FC = () => {
 	return (
@@ -11,7 +12,7 @@ const SignIn: React.FC = () => {
 								Sign in
 							</h2>
 							<p className="mt-2 text-sm text-gray-600">
-								Don't have an account?{" "}
+								Don&apos;t have an account? Don't have an account?{" "}
 								<a
 									href="/signup"
 									title=""
@@ -126,13 +127,13 @@ const SignIn: React.FC = () => {
 							</div>
 						</div>
 					</div>
-					<div className="h-full w-full z-[-1]">
-						<img
-							className="mx-auto h-full w-full rounded-md object-cover"
-							src="https://images.unsplash.com/photo-1630673245362-f69d2b93880e?ixlib=rb-4.0.3&amp;ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&amp;auto=format&amp;fit=crop&amp;w=1740&amp;q=80"
-							alt=""
-						/>
-					</div>
+					<Image
+						className="mx-auto h-full w-full rounded-md object-cover"
+						src="https://images.unsplash.com/photo-1630673245362-f69d2b93880e?ixlib=rb-4.0.3&amp;ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&amp;auto=format&amp;fit=crop&amp;w=1740&amp;q=80"
+						alt="Sign in background"
+						width={1740}
+						height={980}
+					/>
 				</div>
 			</section>
 		</div>

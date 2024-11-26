@@ -1,5 +1,4 @@
 "use client";
-import Image from "next/image";
 import { Card } from "@/components/Card";
 import { AnimatedTooltipPreview } from "@/components/Conributors";
 import { InfiniteMovingCardsDemo } from "@/components/Testimonials";

@@ -1,9 +1,7 @@
 import SupportChat from "@/components/supportchat";
 import React from "react";
 
-type Props = {};
-
-function Chat({}: Props) {
+function Chat() {
 	return <SupportChat />;
 }
 
