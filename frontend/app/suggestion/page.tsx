@@ -68,7 +68,7 @@ const CropPredictionForm: React.FC = () => {
 			console.log(floatData);
 			try {
 				const response = await axios.post(
-					"http://127.0.0.1:5000/predict",
+					"https://cropmate-backend.onrender.com/predict",
 					floatData,
 					{
 						headers: {

@@ -51,10 +51,17 @@ export default function ({}: Props) {
 
 			// Make parallel API calls
 			const [yieldResponse, weatherResponse] = await Promise.all([
-				axios.post("http://127.0.0.1:5000/predict_yield", formData, {
-					headers: { "Content-Type": "application/json" },
-				}),
-				axios.post("http://127.0.0.1:5000/weather", stateWeather),
+				axios.post(
+					"https://cropmate-backend.onrender.com/predict_yield",
+					formData,
+					{
+						headers: { "Content-Type": "application/json" },
+					}
+				),
+				axios.post(
+					"https://cropmate-backend.onrender.com/weather",
+					stateWeather
+				),
 			]);
 
 			// Process yield prediction

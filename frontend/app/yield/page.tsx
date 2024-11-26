@@ -43,7 +43,7 @@ export default function ({}: Props) {
 		e.preventDefault();
 		try {
 			const response = await axios.post(
-				"http://127.0.0.1:5000/predict_yield",
+				"https://cropmate-backend.onrender.com/predict_yield",
 				formData,
 				{
 					headers: {
