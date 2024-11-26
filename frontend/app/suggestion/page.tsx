@@ -120,10 +120,10 @@ const CropPredictionForm: React.FC = () => {
 	};
 
 	return (
-		<div className="">
+		<div className="min-h-[55rem] flex items-center justify-center">
 			<form
 				onSubmit={handleSubmit}
-				className="flex flex-col gap-4 w-[700px] mt-9 mx-auto p-4 bg-[#f5f9f7] rounded-lg border border-[#466459]/40"
+				className="flex flex-col gap-4 w-[700px] mx-auto p-4 backdrop-blur-md bg-white/30 rounded-lg border border-white/40 shadow-lg"
 			>
 				{[
 					"Nitrogen",
@@ -136,15 +136,15 @@ const CropPredictionForm: React.FC = () => {
 				].map((field) => (
 					<div
 						key={field}
-						className="mx-auto w-[98%] h-[49px] bg-[#dbeee8] rounded-[10px] border border-[#466459]/40 p-2"
+						className="mx-auto w-[98%] h-[49px] backdrop-blur-sm bg-white/20 rounded-[10px] border border-white/40 p-2"
 					>
 						<input
 							type="text"
 							name={field}
-							step="any" // Allow decimal values
-							value={(formData as any)[field]} // TS workaround for dynamic key access
+							step="any"
+							value={(formData as any)[field]}
 							onChange={handleChange}
-							className="w-[100%] bg-[#dbeee8] rounded-[10px] border-none text-[#466459] pl-[1.2rem] text-[#486258]/60 text-[22px] font-semibold font-['Inter'] leading-[33px]"
+							className="w-[100%] bg-transparent rounded-[10px] border-none text-[#466459] pl-[1.2rem] text-[22px] font-semibold font-['Inter'] leading-[33px] placeholder-[#466459]/60"
 							placeholder={field}
 							required
 						/>

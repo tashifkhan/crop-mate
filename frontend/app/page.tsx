@@ -13,12 +13,12 @@ import React from "react";
 export default function Home() {
 	return (
 		<>
-			<div className="flex justify-center bg-[#9EC8B9] h-[vh] overflow-auto">
+			<div className="flex justify-center bg-[#9EC8B9] min-h-screen overflow-auto">
 				<div className="w-[1643px] bg-[#9EC8B9]">
-					<div className="w-[310px] h-6 text-[#092635] text-[4rem] font-extrabold font-['Podkova'] leading-normal mx-auto">
+					<div className="w-[310px] h-6 text-[#092635] text-[4rem] font-extrabold font-['Podkova'] leading-normal mx-auto py-4 hidden sm:block">
 						Crop Mate
 					</div>
-					<div className="mt-[4.2rem] flex flex-wrap gap-12 justify-center">
+					<div className="mt-[4.2rem] md:flex md:flex-wrap md:gap-12 md:justify-center pt-6 flex-row">
 						<Card
 							title="Crop Suggestion"
 							description="It suggests you the crop which is most profitable for you"
@@ -42,9 +42,7 @@ export default function Home() {
 						/>
 					</div>
 					<InfiniteMovingCardsDemo />
-					<div className=" flex justify-center">
-						<AnimatedTooltipPreview />
-					</div>
+					<AnimatedTooltipPreview />
 				</div>
 			</div>
 		</>

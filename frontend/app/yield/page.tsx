@@ -7,7 +7,7 @@ import States from "./States";
 import StateDistricts from "./StateDistrict";
 import Crops from "./Crops";
 import seasons from "./seasons";
-import Dialogbox, { DialogBox } from "@/components/Dialogbox";
+import { DialogBox } from "@/components/Dialogbox";
 
 type Props = {};
 
@@ -86,123 +86,105 @@ export default function ({}: Props) {
 	};
 
 	return (
-		<>
+		<div className="min-h-[48rem] flex items-center justify-center">
 			<form
 				onSubmit={handleSubmit}
-				className="flex flex-col gap-4 w-[700px] mt-9 mx-auto p-4 bg-[#f5f9f7] rounded-lg border border-[#466459]/40"
+				className="flex flex-col gap-4 w-[700px] mx-auto p-4 backdrop-blur-md bg-white/30 rounded-lg border border-white/40 shadow-lg"
 			>
-				{/* State Dropdown */}
-				<div className="mx-auto w-[98%] h-[49px] bg-[#dbeee8] rounded-[10px] border border-[#466459]/40 p-2">
-					<select
-						id="State_Name"
-						name="State_Name"
-						value={formData.State_Name}
-						onChange={handleInputChange}
-						className="w-[100%] bg-[#dbeee8] rounded-[10px] border-none text-[#466459] pl-[1.2rem] text-[#486258]/60 text-[22px] font-semibold font-['Inter'] leading-[33px]"
+				{[
+					{
+						name: "State_Name",
+						type: "select",
+						options: states,
+						disabled: false,
+					},
+					{
+						name: "District_Name",
+						type: "select",
+						options: formData.State_Name
+							? stateDistricts[formData.State_Name]
+							: [],
+						disabled: !formData.State_Name,
+					},
+					{
+						name: "Crop_Year",
+						type: "date",
+					},
+					{
+						name: "Season",
+						type: "select",
+						options: seasons,
+						disabled: false,
+					},
+					{
+						name: "Crop",
+						type: "select",
+						options: crops,
+						disabled: false,
+					},
+					{
+						name: "Area",
+						type: "number",
+						placeholder: "Enter area in hectares",
+					},
+				].map((field) => (
+					<div
+						key={field.name}
+						className="mx-auto w-[98%] h-[49px] backdrop-blur-sm bg-white/20 rounded-[10px] border border-white/40 p-2"
 					>
-						<option value="">Select State</option>
-						{states.map((state) => (
-							<option key={state} value={state}>
-								{state}
-							</option>
-						))}
-					</select>
-				</div>
-
-				{/* District Dropdown */}
-				<div className="mx-auto w-[98%] h-[49px] bg-[#dbeee8] rounded-[10px] border border-[#466459]/40 p-2">
-					<select
-						id="District_Name"
-						name="District_Name"
-						value={formData.District_Name}
-						onChange={handleInputChange}
-						disabled={!formData.State_Name}
-						className="w-[100%] bg-[#dbeee8] rounded-[10px] border-none text-[#466459] pl-[1.2rem] text-[#486258]/60 text-[22px] font-semibold font-['Inter'] leading-[33px]"
-					>
-						<option value="">Select District</option>
-						{formData.State_Name &&
-							stateDistricts[formData.State_Name]?.map((district) => (
-								<option key={district} value={district}>
-									{district}
-								</option>
-							))}
-					</select>
-				</div>
-
-				{/* Crop Year */}
-				<div className="mx-auto w-[98%] h-[49px] bg-[#dbeee8] rounded-[10px] border border-[#466459]/40 p-2">
-					<DatePicker
-						selected={
-							formData.Crop_Year
-								? new Date(Number(formData.Crop_Year), 0)
-								: null
-						}
-						onChange={(date) =>
-							handleInputChange({
-								target: {
-									name: "Crop_Year",
-									value: date.getFullYear().toString(),
-								},
-							})
-						}
-						showYearPicker
-						dateFormat="yyyy"
-						className="w-[620px] bg-[#dbeee8] rounded-[10px] border-none text-[#466459] pl-[1.2rem] text-[#486258]/60 text-[22px] font-semibold font-['Inter'] leading-[33px]"
-						placeholderText="Enter crop year"
-					/>
-				</div>
-
-				{/* Season Dropdown */}
-				<div className="mx-auto w-[98%] h-[49px] bg-[#dbeee8] rounded-[10px] border border-[#466459]/40 p-2">
-					<select
-						id="Season"
-						name="Season"
-						value={formData.Season}
-						onChange={handleInputChange}
-						className="w-[100%] bg-[#dbeee8] rounded-[10px] border-none text-[#466459] pl-[1.2rem] text-[#486258]/60 text-[22px] font-semibold font-['Inter'] leading-[33px]"
-					>
-						<option value="">Select Season</option>
-						{seasons.map((season) => (
-							<option key={season} value={season}>
-								{season}
-							</option>
-						))}
-					</select>
-				</div>
-
-				{/* Crop Dropdown */}
-				<div className="mx-auto w-[98%] h-[49px] bg-[#dbeee8] rounded-[10px] border border-[#466459]/40 p-2">
-					<select
-						id="Crop"
-						name="Crop"
-						value={formData.Crop}
-						onChange={handleInputChange}
-						className="w-[100%] bg-[#dbeee8] rounded-[10px] border-none text-[#466459] pl-[1.2rem] text-[#486258]/60 text-[22px] font-semibold font-['Inter'] leading-[33px]"
-					>
-						<option value="">Select Crop</option>
-						{crops.map((crop) => (
-							<option key={crop} value={crop}>
-								{crop}
-							</option>
-						))}
-					</select>
-				</div>
-
-				{/* Area */}
-				<div className="mx-auto w-[98%] h-[49px] bg-[#dbeee8] rounded-[10px] border border-[#466459]/40 p-2">
-					<input
-						type="number"
-						id="Area"
-						name="Area"
-						value={formData.Area}
-						onChange={handleInputChange}
-						className="w-[100%] bg-[#dbeee8] rounded-[10px] border-none text-[#466459] pl-[1.2rem] text-[#486258]/60 text-[22px] font-semibold font-['Inter'] leading-[33px]"
-						placeholder="Enter area in hectares"
-						required
-					/>
-				</div>
-
-				{/* Submit Button */}
+						{field.type === "select" ? (
+							<select
+								name={field.name}
+								value={formData[field.name as keyof typeof formData]}
+								onChange={handleInputChange}
+								disabled={field.disabled}
+								className="w-[100%] bg-transparent rounded-[10px] border-none text-[#466459] pl-[1.2rem] text-[22px] font-semibold font-['Inter'] leading-[33px] placeholder-[#466459]/60"
+							>
+								<option value="">{`Select ${field.name.replace(
+									/_/g,
+									" "
+								)}`}</option>
+								{field.options?.map((option) => (
+									<option key={option} value={option}>
+										{option}
+									</option>
+								))}
+							</select>
+						) : field.type === "date" ? (
+							<DatePicker
+								selected={
+									formData.Crop_Year
+										? new Date(Number(formData.Crop_Year), 0)
+										: null
+								}
+								onChange={(date) =>
+									handleInputChange({
+										target: {
+											name: "Crop_Year",
+											value: date?.getFullYear().toString() || "",
+										},
+									} as React.ChangeEvent<HTMLInputElement>)
+								}
+								showYearPicker
+								dateFormat="yyyy"
+								className="w-full bg-transparent rounded-[10px] border-none text-[#466459] pl-[1.2rem] text-[22px] font-semibold font-['Inter'] leading-[33px] placeholder-[#466459]/60"
+								placeholderText="Select crop year"
+								maxDate={new Date()}
+								yearItemNumber={6}
+							/>
+						) : (
+							<input
+								type={field.type}
+								name={field.name}
+								value={formData[field.name as keyof typeof formData]}
+								onChange={handleInputChange}
+								className="w-[100%] bg-transparent rounded-[10px] border-none text-[#466459] pl-[1.2rem] text-[22px] font-semibold font-['Inter'] leading-[33px] placeholder-[#466459]/60"
+								placeholder={field.placeholder}
+								required
+							/>
+						)}
+					</div>
+				))}
 				<button
 					type="submit"
 					className="w-full h-[50px] bg-[#466459] text-white rounded-lg text-[18px] font-semibold hover:bg-[#3b524c] transition"
@@ -216,6 +198,6 @@ export default function ({}: Props) {
 				isOpen={dialogOpen}
 				onOpenChange={setDialogOpen}
 			/>
-		</>
+		</div>
 	);
 }

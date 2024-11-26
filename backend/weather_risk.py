@@ -91,28 +91,31 @@ class AdvancedWeatherRiskAssessment:
             'moisture_anomaly': moisture_anomaly,
             'risk_category': _categorize_drought_risk(moisture_anomaly)
         }
+    
 
-# Example usage with more comprehensive location data
-mumbai_data = {
-    'name': 'Mumbai',
-    'historical_rainfall': [
-        2100, 2250, 1980, 2300, 2150, 2050, 2200, 2180, 2120, 2070,
-        2300, 2150, 2080, 2220, 2190, 2130, 2110, 2260, 2040, 2170
-    ]
-}
+if (__name__ == "__main__"):
+    
+    # Example usage with more comprehensive location data
+    mumbai_data = {
+        'name': 'Mumbai',
+        'historical_rainfall': [
+            2100, 2250, 1980, 2300, 2150, 2050, 2200, 2180, 2120, 2070,
+            2300, 2150, 2080, 2220, 2190, 2130, 2110, 2260, 2040, 2170
+        ]
+    }
 
-recent_rainfall = [350, 380, 400]  # Last three months' rainfall
+    recent_rainfall = [350, 380, 400]  # Last three months' rainfall
 
-assessment = AdvancedWeatherRiskAssessment(mumbai_data)
+    assessment = AdvancedWeatherRiskAssessment(mumbai_data)
 
-# Advanced flood risk assessment
-flood_risk = assessment.predict_flood_risk(recent_rainfall)
-print("Flood Risk Assessment:")
-for key, value in flood_risk.items():
-    print(f"{key.replace('_', ' ').title()}: {value}")
+    # Advanced flood risk assessment
+    flood_risk = assessment.predict_flood_risk(recent_rainfall)
+    print("Flood Risk Assessment:")
+    for key, value in flood_risk.items():
+        print(f"{key.replace('_', ' ').title()}: {value}")
 
-# Advanced drought risk assessment
-drought_risk = assessment.predict_drought_risk(recent_rainfall)
-print("\nDrought Risk Assessment:")
-for key, value in drought_risk.items():
-    print(f"{key.replace('_', ' ').title()}: {value}")
+    # Advanced drought risk assessment
+    drought_risk = assessment.predict_drought_risk(recent_rainfall)
+    print("\nDrought Risk Assessment:")
+    for key, value in drought_risk.items():
+        print(f"{key.replace('_', ' ').title()}: {value}")

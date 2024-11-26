@@ -139,19 +139,19 @@ export default function ({}: Props) {
 	};
 
 	return (
-		<>
+		<div className="min-h-[50rem] flex items-center justify-center">
 			<form
 				onSubmit={handleSubmit}
-				className="flex flex-col gap-4 w-[700px] mt-9 mx-auto p-4 bg-[#f5f9f7] rounded-lg border border-[#466459]/40"
+				className="flex flex-col gap-4 w-[700px] mx-auto p-4 backdrop-blur-md bg-white/30 rounded-lg border border-white/40 shadow-lg "
 			>
 				{/* State Dropdown */}
-				<div className="mx-auto w-[98%] h-[49px] bg-[#dbeee8] rounded-[10px] border border-[#466459]/40 p-2">
+				<div className="mx-auto w-[98%] h-[49px] backdrop-blur-sm bg-white/20 rounded-[10px] border border-white/40 p-2">
 					<select
 						id="State_Name"
 						name="State_Name"
 						value={formData.State_Name}
 						onChange={handleInputChange}
-						className="w-[100%] bg-[#dbeee8] rounded-[10px] border-none text-[#466459] pl-[1.2rem] text-[#486758]/60 text-[22px] font-semibold font-['Inter'] leading-[33px]"
+						className="w-[100%] bg-transparent rounded-[10px] border-none text-[#466459] pl-[1.2rem] text-[18px] font-semibold font-['Inter'] leading-[33px]"
 					>
 						<option value="">Select State</option>
 						{States.map((state) => (
@@ -163,14 +163,14 @@ export default function ({}: Props) {
 				</div>
 
 				{/* District Dropdown */}
-				<div className="mx-auto w-[98%] h-[49px] bg-[#dbeee8] rounded-[10px] border border-[#466459]/40 p-2">
+				<div className="mx-auto w-[98%] h-[49px] backdrop-blur-sm bg-white/20 rounded-[10px] border border-white/40 p-2">
 					<select
 						id="District_Name"
 						name="District_Name"
 						value={formData.District_Name}
 						onChange={handleInputChange}
 						disabled={!formData.State_Name}
-						className="w-[100%] bg-[#dbeee8] rounded-[10px] border-none text-[#466459] pl-[1.2rem] text-[#486758]/60 text-[22px] font-semibold font-['Inter'] leading-[33px]"
+						className="w-[100%] bg-transparent rounded-[10px] border-none text-[#466459] pl-[1.2rem] text-[18px] font-semibold font-['Inter'] leading-[33px]"
 					>
 						<option value="">Select District</option>
 						{formData.State_Name &&
@@ -183,13 +183,13 @@ export default function ({}: Props) {
 				</div>
 
 				{/* Season Dropdown */}
-				<div className="mx-auto w-[98%] h-[49px] bg-[#dbeee8] rounded-[10px] border border-[#466459]/40 p-2">
+				<div className="mx-auto w-[98%] h-[49px] backdrop-blur-sm bg-white/20 rounded-[10px] border border-white/40 p-2">
 					<select
 						id="Season"
 						name="Season"
 						value={formData.Season}
 						onChange={handleInputChange}
-						className="w-[100%] bg-[#dbeee8] rounded-[10px] border-none text-[#466459] pl-[1.2rem] text-[#486758]/60 text-[22px] font-semibold font-['Inter'] leading-[33px]"
+						className="w-[100%] bg-transparent rounded-[10px] border-none text-[#466459] pl-[1.2rem] text-[18px] font-semibold font-['Inter'] leading-[33px]"
 					>
 						<option value="">Select Season</option>
 						{seasons.map((season) => (
@@ -201,13 +201,13 @@ export default function ({}: Props) {
 				</div>
 
 				{/* Crop Dropdown */}
-				<div className="mx-auto w-[98%] h-[49px] bg-[#dbeee8] rounded-[10px] border border-[#466459]/40 p-2">
+				<div className="mx-auto w-[98%] h-[49px] backdrop-blur-sm bg-white/20 rounded-[10px] border border-white/40 p-2">
 					<select
 						id="Crop"
 						name="Crop"
 						value={formData.Crop}
 						onChange={handleInputChange}
-						className="w-[100%] bg-[#dbeee8] rounded-[10px] border-none text-[#466459] pl-[1.2rem] text-[#486758]/60 text-[22px] font-semibold font-['Inter'] leading-[33px]"
+						className="w-[100%] bg-transparent rounded-[10px] border-none text-[#466459] pl-[1.2rem] text-[18px] font-semibold font-['Inter'] leading-[33px]"
 					>
 						<option value="">Select Crop</option>
 						{Crops.map((crop) => (
@@ -219,14 +219,14 @@ export default function ({}: Props) {
 				</div>
 
 				{/* Area */}
-				<div className="mx-auto w-[98%] h-[49px] bg-[#dbeee8] rounded-[10px] border border-[#466459]/40 p-2">
+				<div className="mx-auto w-[98%] h-[49px] backdrop-blur-sm bg-white/20 rounded-[10px] border border-white/40 p-2">
 					<input
 						type="number"
 						id="Area"
 						name="Area"
 						value={formData.Area}
 						onChange={handleInputChange}
-						className="w-[100%] bg-[#dbeee8] rounded-[10px] border-none text-[#466459] pl-[1.2rem] text-[#486758]/60 text-[22px] font-semibold font-['Inter'] leading-[33px]"
+						className="w-[100%] bg-transparent rounded-[10px] border-none text-[#466459] pl-[1.2rem] text-[18px] font-semibold font-['Inter'] leading-[33px]"
 						placeholder="Enter area in hectares"
 						required
 					/>
@@ -246,6 +246,6 @@ export default function ({}: Props) {
 				isOpen={dialogOpen}
 				onOpenChange={setDialogOpen}
 			/>
-		</>
+		</div>
 	);
 }

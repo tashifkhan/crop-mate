@@ -33,7 +33,7 @@ export default function RootLayout({
 }) {
 	return (
 		<html lang="en">
-			<body className={inter.className}>
+			<body className={`${inter.className} bg-[#9EC8B9]`}>
 				<Navbar />
 				<main className="">{children}</main>
 				<SupportChat />
