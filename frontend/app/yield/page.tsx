@@ -40,11 +40,15 @@ export default function YieldPage() {
 	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
 		try {
-			const response = await axios.post("predict_yield", formData, {
-				headers: {
-					"Content-Type": "application/json",
-				},
-			});
+			const response = await axios.post(
+				"https://cropmate-backend.onrender.com/predict_yield",
+				formData,
+				{
+					headers: {
+						"Content-Type": "application/json",
+					},
+				}
+			);
 
 			if (response.status >= 200 && response.status < 300) {
 				const data = response.data;

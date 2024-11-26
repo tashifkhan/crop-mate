@@ -33,7 +33,7 @@ const SupportChat = () => {
 	const chat_resp = async () => {
 		try {
 			const response = await axios.post(
-				"http://127.0.0.1:5000/support",
+				"https://cropmate-backend.onrender.com/support",
 				{
 					prompt: newMessage, // Current user message
 					response: messages
