@@ -5,6 +5,7 @@ import pandas as pd
 import pandas
 import sklearn
 import pickle
+import joblib
 from dotenv import load_dotenv
 from io import BytesIO
 import google.generativeai as genai
@@ -205,9 +206,9 @@ def predict_yield():
 
         try:
             # Load the models and scalers
-            model = pickle.load(open('./models/model2.pkl', 'rb'))
-            sc = pickle.load(open('./models/standscaler2.pkl', 'rb'))
-            label_encoders = pickle.load(open('./models/label_encoders.pkl', 'rb'))
+            model = joblib.load('./models/model2.pkl')
+            sc = joblib.load('./models/standscaler2.pkl')
+            label_encoders = joblib.load('./models/label_encoders.pkl')
 
             # Create DataFrame from input
             input_df = pd.DataFrame([input_data])
