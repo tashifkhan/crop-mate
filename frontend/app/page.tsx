@@ -41,7 +41,9 @@ export default function Home() {
 						/>
 					</div>
 					<InfiniteMovingCardsDemo />
-					<AnimatedTooltipPreview />
+					<div className="pb-20 md:pb-1">
+						<AnimatedTooltipPreview />
+					</div>
 				</div>
 			</div>
 		</>
