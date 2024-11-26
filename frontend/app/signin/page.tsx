@@ -12,7 +12,7 @@ const SignIn: React.FC = () => {
 								Sign in
 							</h2>
 							<p className="mt-2 text-sm text-gray-600">
-								Don&apos;t have an account? Don't have an account?{" "}
+								Don&apos;t have an account? Don&apos;t have an account?{" "}
 								<a
 									href="/signup"
 									title=""

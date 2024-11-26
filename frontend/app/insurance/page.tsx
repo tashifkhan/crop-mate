@@ -10,9 +10,7 @@ import seasons from "../yield/seasons";
 import { DialogBox } from "@/components/Dialogbox";
 import weatherPatterns from "./weatherPattern";
 
-type Props = {};
-
-export default function ({}: Props) {
+const InsurancePage = () => {
 	const [formData, setFormData] = useState({
 		State_Name: "",
 		District_Name: "",
@@ -86,24 +84,24 @@ export default function ({}: Props) {
 
 				// Yield Assessment Section
 				dialogContent = `📊 YIELD ASSESSMENT
-			${isYieldBelowNominal ? "⚠️" : "✅"} Status: ${
+				${isYieldBelowNominal ? "⚠️" : "✅"} Status: ${
 					isYieldBelowNominal ? "Below" : "Above"
 				} nominal yield
-			• Nominal Yield: ${nominalYield}
-			• Predicted Yield: ${yieldData.predicted_yield}
-			• Predicted Production: ${yieldData.predicted_production}\n\n`;
+				• Nominal Yield: ${nominalYield}
+				• Predicted Yield: ${yieldData.predicted_yield}
+				• Predicted Production: ${yieldData.predicted_production}\n\n`;
 
 				// Weather Assessment Section
 				const highFloodRisk = weatherData.flood_risk.percentage > 60;
 				const highDroughtRisk = weatherData.drought_risk.percentage - 67 > 60;
 
 				dialogContent += `🌤️ WEATHER ASSESSMENT
-			• Flood Risk: ${weatherData.flood_risk.percentage}% 
-			• Drought Risk: ${
-				weatherData.drought_risk.percentage - 67 < 0
-					? -1 * (weatherData.drought_risk.percentage - 67)
-					: weatherData.drought_risk.percentage - 67
-			}% \n`;
+				• Flood Risk: ${weatherData.flood_risk.percentage}% 
+				• Drought Risk: ${
+					weatherData.drought_risk.percentage - 67 < 0
+						? -1 * (weatherData.drought_risk.percentage - 67)
+						: weatherData.drought_risk.percentage - 67
+				}% \n`;
 
 				// Risk Recommendations
 				if (highFloodRisk || highDroughtRisk) {
@@ -254,4 +252,6 @@ export default function ({}: Props) {
 			/>
 		</div>
 	);
-}
+};
+
+export default InsurancePage;

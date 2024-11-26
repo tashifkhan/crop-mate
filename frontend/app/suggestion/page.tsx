@@ -1,7 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import axios from "axios";
-import Dialogbox, { DialogBox } from "@/components/Dialogbox";
+import { DialogBox } from "@/components/Dialogbox";
 
 const CropPredictionForm: React.FC = () => {
 	const [formData, setFormData] = useState({
@@ -29,7 +29,7 @@ const CropPredictionForm: React.FC = () => {
 			newValue = Math.min(Math.max(0, parseFloat(value) || 0), 100).toString();
 		}
 
-		// Validation for Ph: Ensure value is between 0 and 14
+		// Validation for Ph: Ensure value is betwen 0 and 14
 		if (name === "Ph") {
 			newValue = Math.min(Math.max(0, parseFloat(value) || 0), 14).toString();
 		}
@@ -141,7 +141,7 @@ const CropPredictionForm: React.FC = () => {
 							type="text"
 							name={field}
 							step="any"
-							value={(formData as any)[field]}
+							value={formData[field as keyof typeof formData]}
 							onChange={handleChange}
 							className="w-[100%] bg-transparent rounded-[10px] border-none text-[#466459] pl-[1.2rem] text-[22px] font-semibold font-['Inter'] leading-[33px] placeholder-[#466459]/60"
 							placeholder={field}
