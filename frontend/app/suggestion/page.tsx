@@ -122,7 +122,7 @@ const CropPredictionForm: React.FC = () => {
 	};
 
 	return (
-		<div className="min-h-[55rem] flex items-center justify-center">
+		<div className="min-h-screen flex items-center justify-center">
 			<form
 				onSubmit={handleSubmit}
 				className="flex flex-col gap-4 w-[700px] mx-auto p-4 backdrop-blur-md bg-white/30 rounded-lg border border-white/40 shadow-lg"

@@ -36,19 +36,23 @@ const Navbar = () => {
 				<div className="flex justify-between items-center h-16">
 					<div>
 						{/* Logo */}
-						<Link href="/">
-							<Image
-								src={logoSrc}
-								alt="CropMate Cutie"
-								width={165}
-								height={50}
-								className="cursor-pointer fixed top-4 left-1/2 -translate-x-1/2 sm:translate-x-0 sm:left-4 z-50"
-							/>
-						</Link>
+						{!isOpen && (
+							<Link href="/">
+								<Image
+									src={logoSrc}
+									alt="CropMate Cutie"
+									width={165}
+									height={50}
+									className="cursor-pointer fixed top-4 left-1/2 -translate-x-1/2 sm:translate-x-0 sm:left-4 z-50"
+								/>
+							</Link>
+						)}
 						<div className="flex-shrink-0 flex items-center">
 							<Link
 								href="/"
-								className="text-xl font-bold text-gray-800 hidden xl:block"
+								className={`text-xl font-bold text-gray-800 ${
+									isOpen ? "" : "hidden"
+								} xl:block`}
 							>
 								CropMate
 							</Link>
@@ -109,7 +113,7 @@ const Navbar = () => {
 									href={item.href}
 									className={`block px-3 py-2 rounded-md text-base font-medium transition-colors duration-200 ${
 										pathname === item.href
-											? "text-blue-600 bg-blue-50"
+											? "text-[#42626b] bg-blue-50"
 											: "text-gray-600 hover:text-gray-900 hover:bg-gray-100"
 									}`}
 								>
