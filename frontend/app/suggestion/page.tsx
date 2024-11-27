@@ -19,6 +19,7 @@ const CropPredictionForm: React.FC = () => {
 		title: "",
 		content: "",
 	});
+	const [isLoading, setIsLoading] = useState(false);
 
 	const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		const { name, value } = e.target;
@@ -42,6 +43,7 @@ const CropPredictionForm: React.FC = () => {
 
 	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
+		setIsLoading(true);
 
 		// Convert form data to floats before sending to the server
 		const floatData = {
@@ -59,6 +61,7 @@ const CropPredictionForm: React.FC = () => {
 				title: "Error",
 				content: "Please fill in all fields with valid numbers.",
 			});
+			setIsLoading(false);
 			setDialogOpen(true);
 			return;
 		}
@@ -152,15 +155,27 @@ const CropPredictionForm: React.FC = () => {
 				<button
 					type="submit"
 					className="w-full h-[50px] bg-[#466459] text-white rounded-lg text-[18px] font-semibold hover:bg-[#3b524c] transition"
+					disabled={isLoading}
 				>
-					Predict Crop
+					{isLoading ? "Predicting..." : "Predict Crop"}
 				</button>
 			</form>
+			{isLoading && (
+				<div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+					<div className="loader"></div>
+				</div>
+			)}
 			<DialogBox
 				title={dialogContent.title}
 				displayContent={dialogContent.content}
 				isOpen={dialogOpen}
-				onOpenChange={setDialogOpen}
+				onOpenChange={(isOpen) => {
+					setDialogOpen(isOpen);
+					if (!isOpen) {
+						setIsLoading(false);
+						setDialogContent({ title: "", content: "" });
+					}
+				}}
 			/>
 		</div>
 	);

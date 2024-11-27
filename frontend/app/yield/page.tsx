@@ -29,6 +29,7 @@ export default function YieldPage() {
 		title: "",
 		content: "",
 	});
+	const [isLoading, setIsLoading] = useState(false);
 
 	const handleInputChange = (
 		e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
@@ -39,6 +40,7 @@ export default function YieldPage() {
 
 	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
+		setIsLoading(true);
 		try {
 			const response = await axios.post(
 				"https://cropmate-backend.onrender.com/predict_yield",
@@ -80,6 +82,7 @@ export default function YieldPage() {
 				content: "Failed to predict the yield. Please try again.",
 			});
 		}
+		setIsLoading(false);
 		setDialogOpen(true);
 	};
 
@@ -186,15 +189,26 @@ export default function YieldPage() {
 				<button
 					type="submit"
 					className="w-full h-[50px] bg-[#466459] text-white rounded-lg text-[18px] font-semibold hover:bg-[#3b524c] transition"
+					disabled={isLoading}
 				>
-					Predict Yield
+					{isLoading ? "Predicting..." : "Predict Yield"}
 				</button>
 			</form>
+			{isLoading && (
+				<div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+					<div className="loader"></div>
+				</div>
+			)}
 			<DialogBox
 				title={dialogContent.title}
 				displayContent={dialogContent.content}
 				isOpen={dialogOpen}
-				onOpenChange={setDialogOpen}
+				onOpenChange={(isOpen) => {
+					setDialogOpen(isOpen);
+					if (!isOpen) {
+						setDialogContent({ title: "", content: "" });
+					}
+				}}
 			/>
 		</div>
 	);
