@@ -134,7 +134,6 @@ const SignIn: React.FC = () => {
 						width={1740}
 						height={980}
 					/>
-					{/* <img */}
 				</div>
 			</section>
 		</div>
