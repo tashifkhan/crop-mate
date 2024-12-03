@@ -8,6 +8,8 @@ import StateDistricts from "./StateDistrict";
 import Crops from "./Crops";
 import seasons from "./seasons";
 import { DialogBox } from "@/components/Dialogbox";
+import TextField from "@mui/material/TextField";
+import MenuItem from "@mui/material/MenuItem";
 
 export default function YieldPage() {
 	const states = States;
@@ -32,7 +34,9 @@ export default function YieldPage() {
 	const [isLoading, setIsLoading] = useState(false);
 
 	const handleInputChange = (
-		e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+		e: React.ChangeEvent<
+			HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
+		>
 	) => {
 		const { name, value } = e.target;
 		setFormData((prev) => ({ ...prev, [name]: value }));
@@ -87,10 +91,13 @@ export default function YieldPage() {
 	};
 
 	return (
-		<div className="min-h-screen flex items-center justify-center">
+		<div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#9EC8B9] to-blue-100">
 			<form
 				onSubmit={handleSubmit}
-				className="flex flex-col gap-4 w-[700px] mx-auto p-4 backdrop-blur-md bg-white/30 rounded-lg border border-white/40 shadow-lg"
+				className="flex flex-col gap-4 w-[700px] mx-auto p-8 
+				backdrop-blur-lg bg-white/20 rounded-xl 
+				border border-white/30 shadow-2xl
+				hover:shadow-3xl transition-all duration-300"
 			>
 				{[
 					{
@@ -131,58 +138,77 @@ export default function YieldPage() {
 				].map((field) => (
 					<div
 						key={field.name}
-						className="mx-auto w-[98%] h-[49px] backdrop-blur-sm bg-white/20 rounded-[10px] border border-white/40 p-2"
+						className="transition-all duration-300 hover:transform hover:scale-105 hover:shadow-lg hover:-translate-y-1"
 					>
 						{field.type === "select" ? (
-							<select
-								name={field.name}
-								value={formData[field.name as keyof typeof formData]}
-								onChange={handleInputChange}
-								disabled={field.disabled}
-								className="w-[100%] bg-transparent rounded-[10px] border-none text-[#466459] pl-[1.2rem] text-[22px] font-semibold font-['Inter'] leading-[33px] placeholder-[#466459]/60"
-							>
-								<option value="">{`Select ${field.name.replace(
-									/_/g,
-									" "
-								)}`}</option>
-								{field.options?.map((option) => (
-									<option key={option} value={option}>
-										{option}
+							<div className="relative">
+								<label className="block text-[#466459] font-medium mb-1 opacity-70">
+									{field.name.replace(/_/g, " ")}
+								</label>
+								<select
+									name={field.name}
+									value={formData[field.name as keyof typeof formData]}
+									onChange={handleInputChange}
+									disabled={field.disabled}
+									className="w-full p-3 bg-white/10 backdrop-blur-md rounded-xl 
+									border border-white/30 text-[#466459] focus:outline-none 
+									focus:border-white/50 transition-all duration-300"
+								>
+									<option value="">
+										{`Select ${field.name.replace(/_/g, " ")}`}
 									</option>
-								))}
-							</select>
+									{field.options?.map((option) => (
+										<option key={option} value={option}>
+											{option}
+										</option>
+									))}
+								</select>
+							</div>
 						) : field.type === "date" ? (
-							<DatePicker
-								selected={
-									formData.Crop_Year
-										? new Date(Number(formData.Crop_Year), 0)
-										: null
-								}
-								onChange={(date) =>
-									handleInputChange({
-										target: {
-											name: "Crop_Year",
-											value: date?.getFullYear().toString() || "",
-										},
-									} as React.ChangeEvent<HTMLInputElement>)
-								}
-								showYearPicker
-								dateFormat="yyyy"
-								className="w-full bg-transparent rounded-[10px] border-none text-[#466459] pl-[1.2rem] text-[22px] font-semibold font-['Inter'] leading-[33px] placeholder-[#466459]/60"
-								placeholderText="Select crop year"
-								maxDate={new Date()}
-								yearItemNumber={6}
-							/>
+							<div className="relative">
+								<label className="block text-[#466459] font-medium mb-1 opacity-70">
+									Crop Year
+								</label>
+								<DatePicker
+									selected={
+										formData.Crop_Year
+											? new Date(Number(formData.Crop_Year), 0)
+											: null
+									}
+									onChange={(date) =>
+										handleInputChange({
+											target: {
+												name: "Crop_Year",
+												value: date?.getFullYear().toString() || "",
+											},
+										} as React.ChangeEvent<HTMLInputElement>)
+									}
+									showYearPicker
+									dateFormat="yyyy"
+									className="w-full p-3 bg-white/10 backdrop-blur-md rounded-xl 
+									border border-white/30 text-[#466459] focus:outline-none 
+									focus:border-white/50 transition-all duration-300"
+									maxDate={new Date()}
+									yearItemNumber={6}
+								/>
+							</div>
 						) : (
-							<input
-								type={field.type}
-								name={field.name}
-								value={formData[field.name as keyof typeof formData]}
-								onChange={handleInputChange}
-								className="w-[100%] bg-transparent rounded-[10px] border-none text-[#466459] pl-[1.2rem] text-[22px] font-semibold font-['Inter'] leading-[33px] placeholder-[#466459]/60"
-								placeholder={field.placeholder}
-								required
-							/>
+							<div className="relative">
+								<label className="block text-[#466459] font-medium mb-1 opacity-70">
+									{field.name.replace(/_/g, " ")}
+								</label>
+								<input
+									type={field.type}
+									name={field.name}
+									value={formData[field.name as keyof typeof formData]}
+									onChange={handleInputChange}
+									placeholder={field.placeholder}
+									required
+									className="w-full p-3 bg-white/10 backdrop-blur-md rounded-xl 
+									border border-white/30 text-[#466459] focus:outline-none 
+									focus:border-white/50 transition-all duration-300"
+								/>
+							</div>
 						)}
 					</div>
 				))}

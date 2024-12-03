@@ -122,10 +122,13 @@ const CropPredictionForm: React.FC = () => {
 	};
 
 	return (
-		<div className="min-h-screen flex items-center justify-center">
+		<div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#9EC8B9] to-blue-100">
 			<form
 				onSubmit={handleSubmit}
-				className="flex flex-col gap-4 w-[700px] mx-auto p-4 backdrop-blur-md bg-white/30 rounded-lg border border-white/40 shadow-lg"
+				className="flex flex-col gap-4 w-[700px] mx-auto p-8 
+            backdrop-blur-lg bg-white/20 rounded-xl 
+            border border-white/30 shadow-2xl
+            hover:shadow-3xl transition-all duration-300"
 			>
 				{[
 					"Nitrogen",
@@ -138,26 +141,32 @@ const CropPredictionForm: React.FC = () => {
 				].map((field) => (
 					<div
 						key={field}
-						className="mx-auto w-[98%] h-[49px] backdrop-blur-sm bg-white/20 rounded-[10px] border border-white/40 p-2"
+						className="transition-all duration-300 hover:transform hover:scale-105 hover:shadow-lg hover:-translate-y-1"
 					>
-						<input
-							type="text"
-							name={field}
-							step="any"
-							value={formData[field as keyof typeof formData]}
-							onChange={handleChange}
-							className="w-[100%] bg-transparent rounded-[10px] border-none text-[#466459] pl-[1.2rem] text-[22px] font-semibold font-['Inter'] leading-[33px] placeholder-[#466459]/60"
-							placeholder={field}
-							required
-						/>
+						<div className="relative">
+							<label className="block text-[#466459] font-medium mb-1 opacity-70">
+								{field}
+							</label>
+							<input
+								type="text"
+								name={field}
+								step="any"
+								value={formData[field as keyof typeof formData]}
+								onChange={handleChange}
+								className="w-full p-3 bg-white/10 backdrop-blur-md rounded-xl 
+                            border border-white/30 text-[#466459] focus:outline-none 
+                            focus:border-white/50 transition-all duration-300"
+								placeholder={`Enter ${field.toLowerCase()}`}
+								required
+							/>
+						</div>
 					</div>
 				))}
 				<button
 					type="submit"
 					className="w-full h-[50px] bg-[#466459] text-white rounded-lg text-[18px] font-semibold hover:bg-[#3b524c] transition"
-					disabled={isLoading}
 				>
-					{isLoading ? "Predicting..." : "Predict Crop"}
+					Predict Crop
 				</button>
 			</form>
 			{isLoading && (

@@ -146,100 +146,96 @@ const InsurancePage = () => {
 	};
 
 	return (
-		<div className="min-h-screen flex items-center justify-center">
+		<div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#9EC8B9] to-blue-100">
 			<form
 				onSubmit={handleSubmit}
-				className="flex flex-col gap-4 w-[700px] mx-auto p-4 backdrop-blur-md bg-white/30 rounded-lg border border-white/40 shadow-lg "
+				className="flex flex-col gap-4 w-[700px] mx-auto p-8 
+    backdrop-blur-lg bg-white/20 rounded-xl 
+    border border-white/30 shadow-2xl
+    hover:shadow-3xl transition-all duration-300"
 			>
-				{/* State Dropdown */}
-				<div className="mx-auto w-[98%] h-[49px] backdrop-blur-sm bg-white/20 rounded-[10px] border border-white/40 p-2">
-					<select
-						id="State_Name"
-						name="State_Name"
-						value={formData.State_Name}
-						onChange={handleInputChange}
-						className="w-[100%] bg-transparent rounded-[10px] border-none text-[#466459] pl-[1.2rem] text-[18px] font-semibold font-['Inter'] leading-[33px]"
+				{[
+					{
+						name: "State_Name",
+						type: "select",
+						options: States,
+						disabled: false,
+					},
+					{
+						name: "District_Name",
+						type: "select",
+						options: formData.State_Name
+							? StateDistricts[formData.State_Name]
+							: [],
+						disabled: !formData.State_Name,
+					},
+					{
+						name: "Season",
+						type: "select",
+						options: seasons,
+						disabled: false,
+					},
+					{
+						name: "Crop",
+						type: "select",
+						options: Crops,
+						disabled: false,
+					},
+					{
+						name: "Area",
+						type: "number",
+						placeholder: "Enter area in hectares",
+					},
+				].map((field) => (
+					<div
+						key={field.name}
+						className="transition-all duration-300 hover:transform hover:scale-105 hover:shadow-lg hover:-translate-y-1"
 					>
-						<option value="">Select State</option>
-						{States.map((state) => (
-							<option key={state} value={state}>
-								{state}
-							</option>
-						))}
-					</select>
-				</div>
-
-				{/* District Dropdown */}
-				<div className="mx-auto w-[98%] h-[49px] backdrop-blur-sm bg-white/20 rounded-[10px] border border-white/40 p-2">
-					<select
-						id="District_Name"
-						name="District_Name"
-						value={formData.District_Name}
-						onChange={handleInputChange}
-						disabled={!formData.State_Name}
-						className="w-[100%] bg-transparent rounded-[10px] border-none text-[#466459] pl-[1.2rem] text-[18px] font-semibold font-['Inter'] leading-[33px]"
-					>
-						<option value="">Select District</option>
-						{formData.State_Name &&
-							StateDistricts[formData.State_Name]?.map((district) => (
-								<option key={district} value={district}>
-									{district}
-								</option>
-							))}
-					</select>
-				</div>
-
-				{/* Season Dropdown */}
-				<div className="mx-auto w-[98%] h-[49px] backdrop-blur-sm bg-white/20 rounded-[10px] border border-white/40 p-2">
-					<select
-						id="Season"
-						name="Season"
-						value={formData.Season}
-						onChange={handleInputChange}
-						className="w-[100%] bg-transparent rounded-[10px] border-none text-[#466459] pl-[1.2rem] text-[18px] font-semibold font-['Inter'] leading-[33px]"
-					>
-						<option value="">Select Season</option>
-						{seasons.map((season) => (
-							<option key={season} value={season}>
-								{season}
-							</option>
-						))}
-					</select>
-				</div>
-
-				{/* Crop Dropdown */}
-				<div className="mx-auto w-[98%] h-[49px] backdrop-blur-sm bg-white/20 rounded-[10px] border border-white/40 p-2">
-					<select
-						id="Crop"
-						name="Crop"
-						value={formData.Crop}
-						onChange={handleInputChange}
-						className="w-[100%] bg-transparent rounded-[10px] border-none text-[#466459] pl-[1.2rem] text-[18px] font-semibold font-['Inter'] leading-[33px]"
-					>
-						<option value="">Select Crop</option>
-						{Crops.map((crop) => (
-							<option key={crop} value={crop}>
-								{crop}
-							</option>
-						))}
-					</select>
-				</div>
-
-				{/* Area */}
-				<div className="mx-auto w-[98%] h-[49px] backdrop-blur-sm bg-white/20 rounded-[10px] border border-white/40 p-2">
-					<input
-						type="number"
-						id="Area"
-						name="Area"
-						value={formData.Area}
-						onChange={handleInputChange}
-						className="w-[100%] bg-transparent rounded-[10px] border-none text-[#466459] pl-[1.2rem] text-[18px] font-semibold font-['Inter'] leading-[33px]"
-						placeholder="Enter area in hectares"
-						required
-					/>
-				</div>
-
-				{/* Submit Button */}
+						{field.type === "select" ? (
+							<div className="relative">
+								<label className="block text-[#466459] font-medium mb-1 opacity-70">
+									{field.name.replace(/_/g, " ")}
+								</label>
+								<select
+									name={field.name}
+									value={formData[field.name as keyof typeof formData]}
+									onChange={handleInputChange}
+									disabled={field.disabled}
+									className="w-full p-3 bg-white/10 backdrop-blur-md rounded-xl 
+              border border-white/30 text-[#466459] focus:outline-none 
+              focus:border-white/50 transition-all duration-300"
+								>
+									<option value="">{`Select ${field.name.replace(
+										/_/g,
+										" "
+									)}`}</option>
+									{field.options?.map((option) => (
+										<option key={option} value={option}>
+											{option}
+										</option>
+									))}
+								</select>
+							</div>
+						) : (
+							<div className="relative">
+								<label className="block text-[#466459] font-medium mb-1 opacity-70">
+									{field.name.replace(/_/g, " ")}
+								</label>
+								<input
+									type={field.type}
+									name={field.name}
+									value={formData[field.name as keyof typeof formData]}
+									onChange={handleInputChange}
+									placeholder={field.placeholder}
+									required
+									className="w-full p-3 bg-white/10 backdrop-blur-md rounded-xl 
+              border border-white/30 text-[#466459] focus:outline-none 
+              focus:border-white/50 transition-all duration-300"
+								/>
+							</div>
+						)}
+					</div>
+				))}
 				<button
 					type="submit"
 					className="w-full h-[50px] bg-[#466459] text-white rounded-lg text-[18px] font-semibold hover:bg-[#3b524c] transition"

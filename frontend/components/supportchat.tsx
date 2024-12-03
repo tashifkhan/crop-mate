@@ -98,11 +98,11 @@ const SupportChat = () => {
 	};
 
 	return (
-		<div className="fixed bottom-4 right-4 w-96 z-50">
+		<div className="fixed bottom-4 right-4 w-[100%-2rem] sm:w-96 z-50">
 			<div className="bg-white rounded-lg shadow-lg overflow-hidden">
 				{/* Header */}
 				<div className="bg-[#2b3f51] p-4 flex justify-between items-center">
-					<h3 className="text-white font-semibold">Support Chat</h3>
+					<h3 className="text-white font-semibold pr-5">Support Chat</h3>
 					<button
 						onClick={() => setIsMinimized(!isMinimized)}
 						className="text-white hover:text-blue-100"
@@ -118,7 +118,7 @@ const SupportChat = () => {
 				{/* Chat area */}
 				{!isMinimized && (
 					<>
-						<div className="max-h-[calc(100vh-14rem)] p-4 overflow-y-auto bg-gray-50 relative transition-all duration-300">
+						<div className="max-h-[calc(100vh-14rem)] p-4 overflow-y-auto bg-gray-50 relative transition-all duration-300 ">
 							<div className="space-y-4">
 								{messages.map((message) => (
 									<div

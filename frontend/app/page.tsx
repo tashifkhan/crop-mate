@@ -12,8 +12,8 @@ import React from "react";
 export default function Home() {
 	return (
 		<>
-			<div className="flex justify-center bg-[#9EC8B9] min-h-screen overflow-auto">
-				<div className="w-[1643px] bg-[#9EC8B9]">
+			<div className="flex justify-center bg-gradient-to-br from-[#9EC8B9] to-blue-100 min-h-screen overflow-auto">
+				<div className="w-[1643px] bg-gradient-to-br from-[#9EC8B9] to-blue-100]">
 					<div className="w-[310px] h-6 text-[#092635] text-[4rem] font-extrabold font-['Podkova'] leading-normal mx-auto py-4 hidden sm:block">
 						Crop Mate
 					</div>
