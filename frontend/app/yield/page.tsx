@@ -8,8 +8,6 @@ import StateDistricts from "./StateDistrict";
 import Crops from "./Crops";
 import seasons from "./seasons";
 import { DialogBox } from "@/components/Dialogbox";
-import TextField from "@mui/material/TextField";
-import MenuItem from "@mui/material/MenuItem";
 
 export default function YieldPage() {
 	const states = States;
