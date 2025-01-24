@@ -27,8 +27,13 @@ export async function initializePyodide() {
   return pyodideInstance;
 }
 
+// Define allowed Python argument types
+type PythonArg = string | number | boolean | object | null | undefined;
 
-export async function callPythonFunction(functionName: string, ...args:any[]): Promise<any> {
+export async function callPythonFunction(
+  functionName: string, 
+  ...args: PythonArg[]
+): Promise<unknown> {
   const pyodide = await initializePyodide();
   try {
     const pythonFunction = pyodide.globals.get(functionName);
@@ -38,7 +43,7 @@ export async function callPythonFunction(functionName: string, ...args:any[]): P
       throw new Error(`Function ${functionName} is not a valid Python function`);
     }
 
-    let pyArgs: any[] = [];
+    let pyArgs: Array<ReturnType<PyodideInterface['toPy']>> = [];
 
     pyArgs = args.map((arg, index) => {
       console.log(`Converting argument ${index}`);
