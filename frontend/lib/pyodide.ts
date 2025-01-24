@@ -2,7 +2,16 @@ import { loadPyodide, PyodideInterface } from 'pyodide';
 
 let pyodideInstance: PyodideInterface | null = null;
 
-const pythonModuleURL = '/module.py';
+const pythonModuleURL = '/scripts/module.py';
+const modelURLs = {
+    column_names: '/scripts/models/column_names.pkl',
+    label_encoders: '/scripts/models/label_encoders.pkl',
+    minmaxscaler: '/scripts/models/minmaxscaler.pkl',
+    model: '/scripts/models/model.pkl',
+    model2: '/scripts/models/model2.pkl',
+    standscaler: '/scripts/models/standscaler.pkl',
+    standscaler2: '/scripts/models/standscaler2.pkl'
+};
 
 async function fetchPythonCode(url: string): Promise<string> {
   const response = await fetch(url);
@@ -10,6 +19,15 @@ async function fetchPythonCode(url: string): Promise<string> {
     throw new Error(`Failed to fetch Python module from ${url}: ${response.statusText}`);
   }
   return response.text();
+}
+
+
+async function fetchModel(url: string): Promise<ArrayBuffer> {
+  const response = await fetch(url);
+  if (!response.ok) {
+    throw new Error(`Failed to fetch model from ${url}: ${response.statusText}`);
+  }
+  return response.arrayBuffer();
 }
 
 export async function initializePyodide() {
@@ -20,6 +38,14 @@ export async function initializePyodide() {
       fullStdLib: false,
     });
     
+    await pyodideInstance.loadPackage(['scikit-learn', 'numpy', 'pandas', 'joblib', 'scipy']);
+    
+    console.log('Loading ML models...');
+    for (const [modelName, modelURL] of Object.entries(modelURLs)) {
+      const modelData = await fetchModel(modelURL);
+      pyodideInstance.FS.writeFile(modelName + '.pkl', new Uint8Array(modelData));
+    }
+    
     console.log('Loading main script...');
     const pythonCode = await fetchPythonCode(pythonModuleURL);
     await pyodideInstance.runPython(pythonCode);
@@ -27,7 +53,6 @@ export async function initializePyodide() {
   return pyodideInstance;
 }
 
-// Define allowed Python argument types
 type PythonArg = string | number | boolean | object | null | undefined;
 
 export async function callPythonFunction(
