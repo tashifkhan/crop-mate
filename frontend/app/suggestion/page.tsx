@@ -1,6 +1,6 @@
 "use client";
 import React, { useState } from "react";
-import axios from "axios";
+import { callPythonFunction } from "@/lib/pyodide";
 import { DialogBox } from "@/components/Dialogbox";
 
 const CropPredictionForm: React.FC = () => {
@@ -69,55 +69,42 @@ const CropPredictionForm: React.FC = () => {
 		try {
 			console.log(floatData);
 			try {
-				const response = await axios.post(
-					"https://cropmate-backend.onrender.com/predict",
-					floatData,
-					{
-						headers: {
-							"Content-Type": "application/json",
-						},
-					}
+				const result = await callPythonFunction(
+					"CropPredictor.predict",
+					floatData
 				);
+				const data = result as {
+					status: string;
+					crop?: string;
+					message?: string;
+				};
 
-				// Check if the response status is in the success range (200-299)
-				if (response.status >= 200 && response.status < 300) {
-					const data = response.data;
-
-					// Assuming the Flask backend returns 'crop' and 'message' in the response
-					if (data.crop) {
-						setDialogContent({
-							title: "Recommended Crop:",
-							content: `${data.crop}`,
-						});
-						setDialogOpen(true);
-						// alert(`Predicted crop: ${data.crop}\nMessage: ${data.message}`);
-					} else {
-						setDialogContent({
-							title: "Error:",
-							content:
-								"Error: " + (data.error || "Could not determine the crop."),
-						});
-						setDialogOpen(true);
-						// alert("Error: " + (data.error || "Could not determine the crop."));
-					}
+				if (data.status === "success" && data.crop) {
+					setDialogContent({
+						title: "Recommended Crop:",
+						content: `${data.crop}`,
+					});
+					setDialogOpen(true);
 				} else {
-					throw new Error("Failed to get a valid response from the server");
+					setDialogContent({
+						title: "Error:",
+						content: data.message || "Could not determine the crop.",
+					});
+					setDialogOpen(true);
 				}
 			} catch (error) {
-				console.error("Error submitting the form", error);
+				console.error("Error predicting crop:", error);
 				setDialogContent({
 					title: "Error:",
 					content: "Failed to predict the crop. Please try again.",
 				});
-				// alert("Failed to predict the crop. Please try again.");
 			}
 		} catch (error) {
-			console.error("Error submitting the form", error);
+			console.error("Error in form submission:", error);
 			setDialogContent({
 				title: "Error:",
 				content: "Failed to predict the crop. Please try again.",
 			});
-			// alert("Failed to predict the crop. Please try again.");
 		}
 	};
 
